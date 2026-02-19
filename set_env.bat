@@ -8,4 +8,4 @@ set ISAACSIM_PYTHON_EXE=%ISAACSIM_PATH%\python.bat
 set PYTHONEXE=%CONDA_PREFIX%\python.exe
 
 cd /d D:\IsaacLab
-isaaclab.bat -p "%REPO%script\print_bittle_joints.py"
+D:\IsaacLab\_isaac_sim\python.bat D:\Project\RLCPG\quadraped_RL_CPG\script\CPGv2.py

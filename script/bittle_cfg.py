@@ -9,7 +9,7 @@ from isaaclab.assets import ArticulationCfg
 
 # Repo root = .../quadraped_RL_CPG
 REPO_ROOT = Path(__file__).resolve().parents[1]
-BITTLE_USD_PATH = (REPO_ROOT / "bittle_fixed" / "bittle_fixed.usd").as_posix()
+BITTLE_USD_PATH = (REPO_ROOT / "bittle" / "bittle.usd").as_posix()
 
 # Symmetric stand pose (radians) for your joint names.
 # If knees bend the wrong direction, flip the sign of ALL knee values.

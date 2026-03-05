@@ -150,30 +150,33 @@ def spawn_ground_and_light():
     light.CreateIntensityAttr(3000.0)
 
 
+# def auto_usd_path() -> str:
+#     # script is ...\RLCPG\script\xxx.py
+#     script_dir = Path(__file__).resolve().parent
+#     usd_dir = (script_dir.parent / "bittle_fixed").resolve()
+#     if not usd_dir.exists():
+#         raise FileNotFoundError(f"USD_DIR does not exist: {usd_dir}")
+#     cands = list(usd_dir.glob("*.usd"))
+#     if len(cands) == 0:
+#         raise FileNotFoundError(f"No .usd files in: {usd_dir}")
+
+#     def score(p: Path) -> int:
+#         n = p.name.lower()
+#         s = 0
+#         if "bittle" in n:
+#             s += 20
+#         if "fixed" in n:
+#             s += 10
+#         return s
+
+#     cands.sort(key=score, reverse=True)
+#     print(f"[info] USD_PATH={str(cands[0])}", flush=True)
+#     return str(cands[0])
+
 def auto_usd_path() -> str:
-    # script is ...\RLCPG\script\xxx.py
-    script_dir = Path(__file__).resolve().parent
-    usd_dir = (script_dir.parent / "bittle_fixed").resolve()
-    if not usd_dir.exists():
-        raise FileNotFoundError(f"USD_DIR does not exist: {usd_dir}")
-    cands = list(usd_dir.glob("*.usd"))
-    if len(cands) == 0:
-        raise FileNotFoundError(f"No .usd files in: {usd_dir}")
-
-    def score(p: Path) -> int:
-        n = p.name.lower()
-        s = 0
-        if "bittle" in n:
-            s += 20
-        if "fixed" in n:
-            s += 10
-        return s
-
-    cands.sort(key=score, reverse=True)
-    print(f"[info] USD_PATH={str(cands[0])}", flush=True)
-    return str(cands[0])
-
-
+    p = r"D:\Project\RLCPG\quadraped_RL_CPG\bittle\bittle.usd"
+    print(f"[info] USD_PATH={p}", flush=True)
+    return p
 # ============================================================
 # CPG: Phase Oscillator Network (Kuramoto-like with desired offsets)
 # ============================================================

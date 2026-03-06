@@ -1,18 +1,15 @@
-
+# STAND_CALC.py
 from __future__ import annotations
 
 import argparse
+import inspect
+import math
 
-# Must create SimulationApp before importing any Omniverse/pxr modules.
 from isaacsim import SimulationApp
 
 
 def _spawn_ground_plane(stage) -> None:
-    """
-    Spawn a PhysX ground plane without relying on Isaac content paths.
-    We inspect the runtime signature of add_ground_plane and pass what THIS version expects.
-    """
-    import inspect
+    """Version-safe world ground plane spawn."""
     import omni.physx.scripts.physicsUtils as physx_utils
     from pxr import Gf, UsdGeom
 
@@ -25,9 +22,9 @@ def _spawn_ground_plane(stage) -> None:
     AXIS = "Z"
     POS = Gf.Vec3f(0.0, 0.0, 0.0)
     SIZE = 1000.0
-    COLOR = Gf.Vec3f(0.1, 0.1, 0.1)
+    COLOR = Gf.Vec3f(0.15, 0.15, 0.15)
     HEIGHT = 0.0
-# Im not sure which var is needed in this version so i just try all of them (anyway it works)
+
     def resolve_value(param_name: str):
         n = param_name.lower()
         if "stage" in n:
@@ -38,7 +35,7 @@ def _spawn_ground_plane(stage) -> None:
             return AXIS
         if "height" in n:
             return HEIGHT
-        if "pos" in n or "trans" in n or "origin" in n:
+        if "pos" in n or "trans" in n or "origin" in n or "position" in n:
             return POS
         if "size" in n or "scale" in n or "extent" in n:
             return SIZE
@@ -48,19 +45,15 @@ def _spawn_ground_plane(stage) -> None:
 
     args = []
     kwargs = {}
-
     for p in sig.parameters.values():
         if p.kind in (inspect.Parameter.VAR_POSITIONAL, inspect.Parameter.VAR_KEYWORD):
             continue
-
         try:
             v = resolve_value(p.name)
         except RuntimeError:
-            # If it's optional and unknown, skip it.
             if p.default is not inspect._empty:
                 continue
             raise
-
         if p.kind == inspect.Parameter.POSITIONAL_ONLY:
             args.append(v)
         else:
@@ -70,50 +63,70 @@ def _spawn_ground_plane(stage) -> None:
 
 
 def _spawn_light(stage) -> None:
-    """Create a simple distant light using UsdLux (not UsdGeom)."""
-    from pxr import UsdLux, Gf
-
+    from pxr import UsdLux
     light = UsdLux.DistantLight.Define(stage, "/World/Light")
-    # Minimal attributes; safe defaults
     light.CreateIntensityAttr(3000.0)
-    # Optional: point the light a bit
-    xform = UsdLux.ShadowAPI(light)  # harmless; keeps compatibility with Kit
-    _ = xform
-    # If you want a direction, use an Xform; not required for Phase A.
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--headless", action="store_true", help="Run headless")
-    args, _ = parser.parse_known_args()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--headless", action="store_true")
+    ap.add_argument("--dt", type=float, default=1.0 / 120.0)
+    ap.add_argument("--hold_time", type=float, default=8.0)
+    ap.add_argument("--ramp_time", type=float, default=2.0)
+    ap.add_argument("--print_hz", type=float, default=2.0)
+    ap.add_argument("--margin", type=float, default=0.02, help="desired clearance above ground for lowest body (m)")
+    args, _ = ap.parse_known_args()
 
     simulation_app = SimulationApp({"headless": args.headless})
 
-    # Safe to import after SimulationApp is up.
     import omni.usd
     import isaaclab.sim as sim_utils
     from isaaclab.sim import SimulationContext
     from isaaclab.assets import Articulation
+
     from bittle_cfg import BITTLE_CFG
 
-    sim_cfg = sim_utils.SimulationCfg(dt=1.0 / 120.0)  # no 'substeps' in your version
+    # -----------------------------
+    # Sim
+    # -----------------------------
+    sim_cfg = sim_utils.SimulationCfg(dt=float(args.dt))
     sim = SimulationContext(sim_cfg)
     sim.set_camera_view([1.2, 1.2, 0.8], [0.0, 0.0, 0.2])
 
     stage = omni.usd.get_context().get_stage()
-
     _spawn_ground_plane(stage)
     _spawn_light(stage)
 
+    # -----------------------------
+    # Spawn robot
+    # -----------------------------
     cfg = BITTLE_CFG.copy()
     cfg.prim_path = "/World/Bittle"
+
+    init_pos = getattr(cfg.init_state, "pos", None)
+    init_z = float(init_pos[2]) if init_pos is not None else 0.0
+
+    print("\n========== STAND CALC ==========")
+    print(f"[cfg] prim_path = {cfg.prim_path}")
+    try:
+        print(f"[cfg] usd_path  = {cfg.spawn.usd_path}")
+    except Exception:
+        print("[cfg] usd_path  = <unknown>")
+    print(f"[cfg] init_state.pos = {init_pos}")
+
     robot = Articulation(cfg=cfg)
 
+    # -----------------------------
+    # Reset + initial state write
+    # -----------------------------
     sim.reset()
-
     sim.step()
-    robot.update(sim.get_physics_dt())
 
+    dt = sim.get_physics_dt()
+    robot.update(dt)
+
+    # Write default state once (based on cfg.init_state)
     default_root = robot.data.default_root_state.clone()
     default_q = robot.data.default_joint_pos.clone()
     default_qd = robot.data.default_joint_vel.clone()
@@ -121,44 +134,80 @@ def main() -> None:
     robot.write_root_pose_to_sim(default_root[:, :7])
     robot.write_root_velocity_to_sim(default_root[:, 7:])
     robot.write_joint_state_to_sim(default_q, default_qd)
+    robot.write_data_to_sim()
+
+    # Warmup
+    for _ in range(2):
+        sim.step()
+        robot.update(dt)
     robot.reset()
-# Let the robot settle onto the ground before holding targets
-    # --- Timing ---
-    dt = sim.get_physics_dt()
 
-    # Read current joint state as ramp start (no kick)
+    # -----------------------------
+    # Measure min_body_z and compute dz
+    # -----------------------------
+    body_pos = robot.data.body_pos_w[0]  # (num_bodies, 3)
+    min_body_z = float(body_pos[:, 2].min().item())
+
+    root = robot.data.root_state_w[0]
+    root_z = float(root[2].item())
+
+    margin = float(args.margin)
+    dz = (margin - min_body_z) if (min_body_z < margin) else 0.0
+
+    print(f"[measure] root_z      = {root_z:.4f}")
+    print(f"[measure] min_body_z  = {min_body_z:.4f}")
+    print(f"[measure] margin      = {margin:.4f}")
+    print(f"[measure] dz_to_lift  = {dz:.4f}")
+
+    if dz > 0.0:
+        suggested_init_z = init_z + dz
+        print(f"[suggest] cfg.init_state.pos.z should be ~ {suggested_init_z:.4f}  (current {init_z:.4f} + dz {dz:.4f})")
+    else:
+        print("[suggest] no lift needed; cfg.init_state.pos.z is already high enough.")
+
+    # Apply lift in this run (so you can see stand immediately)
+    if dz > 0.0:
+        root_all = robot.data.root_state_w.clone()
+        root_all[:, 2] += dz
+        robot.write_root_pose_to_sim(root_all[:, :7])
+        robot.write_root_velocity_to_sim(root_all[:, 7:])
+        robot.write_data_to_sim()
+        sim.step()
+        robot.update(dt)
+
+        body_pos2 = robot.data.body_pos_w[0]
+        min_body_z2 = float(body_pos2[:, 2].min().item())
+        root2 = robot.data.root_state_w[0]
+        print(f"[after] root_z     = {float(root2[2].item()):.4f}")
+        print(f"[after] min_body_z = {min_body_z2:.4f}")
+
+    # -----------------------------
+    # Hold stand
+    # -----------------------------
+    hold_time = float(args.hold_time)
+    ramp_time = float(args.ramp_time)
+    steps = int(max(1, math.ceil(hold_time / dt)))
+    print_every = max(1, int(round((1.0 / max(1e-6, args.print_hz)) / dt)))
+
     q0 = robot.data.joint_pos.clone()
-    ramp_time = 2.5  # seconds
-
-    # --- Settle on the ground before the main hold loop ---
-    settle_time = 0.6  # seconds
-    settle_steps = int(settle_time / dt)
-
-    # During settle, already track the stand pose (with a gentle ramp)
-    for k in range(settle_steps):
-        t_set = k * dt
-        alpha = min(1.0, t_set / ramp_time)
+    for k in range(steps):
+        t = k * dt
+        alpha = min(1.0, t / ramp_time) if ramp_time > 1e-6 else 1.0
         q_tgt = (1.0 - alpha) * q0 + alpha * default_q
-        robot.set_joint_position_target(q_tgt)
 
+        robot.set_joint_position_target(q_tgt)
         robot.write_data_to_sim()
         sim.step()
         robot.update(dt)
 
-    # --- Main hold loop (10 seconds) ---
-    t = 0.0
-    T_END = 10.0
-    while simulation_app.is_running() and t < T_END:
-        alpha = min(1.0, (t + settle_time) / ramp_time)
-        q_tgt = (1.0 - alpha) * q0 + alpha * default_q
-        robot.set_joint_position_target(q_tgt)
+        if (k % print_every) == 0:
+            root = robot.data.root_state_w[0]
+            root_z = float(root[2].item())
+            vz = float(root[9].item())
+            min_body_z = float(robot.data.body_pos_w[0][:, 2].min().item())
+            print(f"[t={t:5.2f}s] root_z={root_z:.4f}  min_body_z={min_body_z:.4f}  vz={vz:.4f}")
 
-        robot.write_data_to_sim()
-        sim.step()
-        robot.update(dt)
-        t += dt
-
-
+    print("[done] closing SimulationApp.")
     simulation_app.close()
 
 

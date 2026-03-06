@@ -1,581 +1,398 @@
-# spawn_bittle_cpg_trot_v2.py
-# Upgraded "true" CPG (phase-oscillator network + duty-shaped waveform)
-# Keeps your Route-1 / version-safe patterns and adds structured debug prints.
+# CPGv2.py
+# Full fixed version:
+# - DOES NOT override cfg.spawn.usd_path (uses bittle_cfg.py)
+# - prim_path points to "/World/Bittle/bittle"
+# - handles Isaac Lab joint tensors as (num_envs, num_joints): ALWAYS index [0, idx]
+# - safe stand-pose mapping using name_to_idx (no list.index)
+# - conservative, stable default CPG amplitudes (A_sh=0.22, A_kn=0.18)
+# - keeps your debug prints style (root_xy, z, yaw, phase, tgt/act)
 
 from __future__ import annotations
 
 import os
-import sys
 import math
 import traceback
 from dataclasses import dataclass
-from pathlib import Path
 
 # ============================================================
-# MUST create SimulationApp before pxr/omni/isaaclab imports
+# MUST create SimulationApp BEFORE any isaaclab/pxr imports.
 # ============================================================
 from omni.isaac.kit import SimulationApp  # noqa: E402
 
-HEADLESS = bool(int(os.environ.get("HEADLESS", "0")))
+HEADLESS = os.environ.get("HEADLESS", "0") == "1"
 simulation_app = SimulationApp({"headless": HEADLESS})
-
-# Isaac Lab source path (Route 1)
-ISAACLAB_SOURCE = r"D:\IsaacLab\source"
-if ISAACLAB_SOURCE not in sys.path:
-    sys.path.append(ISAACLAB_SOURCE)
-
-import torch  # noqa: E402
-import omni.usd  # noqa: E402
-import isaaclab.sim as sim_utils  # noqa: E402
-from isaaclab.sim import SimulationContext  # noqa: E402
-from isaaclab.assets import Articulation  # noqa: E402
-
-
-# ============================================================
-# Small utilities
-# ============================================================
-class EveryN:
-    def __init__(self, n: int):
-        self.n = max(int(n), 1)
-        self.i = 0
-
-    def hit(self) -> bool:
-        self.i += 1
-        return (self.i % self.n) == 0
-
-
-def clampf(x: float, lo: float, hi: float) -> float:
-    return max(lo, min(hi, x))
-
-
-def wrap_0_2pi(x: float) -> float:
-    twopi = 2.0 * math.pi
-    x = x % twopi
-    if x < 0.0:
-        x += twopi
-    return x
-
-
-def wrap_mpi_pi(x: float) -> float:
-    # wrap to (-pi, pi]
-    twopi = 2.0 * math.pi
-    x = (x + math.pi) % twopi - math.pi
-    return x
-
-
-def _fmt4(v) -> str:
-    return "[" + ", ".join([f"{float(x):+0.3f}" for x in v]) + "]"
-
-
-def quat_to_yaw_xyzw(q: torch.Tensor) -> torch.Tensor:
-    # q: [4] xyzw
-    x, y, z, w = q[0], q[1], q[2], q[3]
-    siny_cosp = 2.0 * (w * z + x * y)
-    cosy_cosp = 1.0 - 2.0 * (y * y + z * z)
-    return torch.atan2(siny_cosp, cosy_cosp)
-
-
-def smooth_relu(x: float, eps: float = 1e-6) -> float:
-    # smooth max(0,x); C1-ish
-    return 0.5 * (x + math.sqrt(x * x + eps))
 
 
 def env_float(name: str, default: float) -> float:
-    v = os.environ.get(name, None)
-    if v is None:
-        return default
     try:
-        return float(v)
+        return float(os.environ.get(name, default))
     except Exception:
         return default
 
 
-# ============================================================
-# Version-safe ground + light
-# ============================================================
-def spawn_ground_and_light():
-    import inspect
-    import omni.physx.scripts.physicsUtils as physx_utils
-    from pxr import Gf, UsdGeom, UsdLux
-
-    stage = omni.usd.get_context().get_stage()
-    UsdGeom.Xform.Define(stage, "/World")
-
-    fn = physx_utils.add_ground_plane
-    sig = inspect.signature(fn)
-
-    PATH = "/World/GroundPlane"
-    AXIS = "Z"
-    POS = Gf.Vec3f(0.0, 0.0, 0.0)
-    SIZE = 1000.0
-    COLOR = Gf.Vec3f(0.2, 0.2, 0.2)
-    HEIGHT = 0.0
-
-    def resolve_value(param_name: str):
-        n = param_name.lower()
-        if "stage" in n:
-            return stage
-        if "path" in n or "prim" in n:
-            return PATH
-        if "axis" in n:
-            return AXIS
-        if "height" in n:
-            return HEIGHT
-        if "pos" in n or "trans" in n or "origin" in n:
-            return POS
-        if "size" in n or "scale" in n or "extent" in n:
-            return SIZE
-        if "color" in n or "colour" in n:
-            return COLOR
-        raise RuntimeError(f"Unsupported add_ground_plane() parameter: '{param_name}'")
-
-    args = []
-    kwargs = {}
-    for p in sig.parameters.values():
-        if p.kind in (inspect.Parameter.VAR_POSITIONAL, inspect.Parameter.VAR_KEYWORD):
-            continue
-        try:
-            v = resolve_value(p.name)
-        except RuntimeError:
-            if p.default is not inspect._empty:
-                continue
-            raise
-        if p.kind == inspect.Parameter.POSITIONAL_ONLY:
-            args.append(v)
-        else:
-            kwargs[p.name] = v
-    fn(*args, **kwargs)
-
-    light = UsdLux.DistantLight.Define(stage, "/World/Light")
-    light.CreateIntensityAttr(3000.0)
-
-
-# def auto_usd_path() -> str:
-#     # script is ...\RLCPG\script\xxx.py
-#     script_dir = Path(__file__).resolve().parent
-#     usd_dir = (script_dir.parent / "bittle_fixed").resolve()
-#     if not usd_dir.exists():
-#         raise FileNotFoundError(f"USD_DIR does not exist: {usd_dir}")
-#     cands = list(usd_dir.glob("*.usd"))
-#     if len(cands) == 0:
-#         raise FileNotFoundError(f"No .usd files in: {usd_dir}")
-
-#     def score(p: Path) -> int:
-#         n = p.name.lower()
-#         s = 0
-#         if "bittle" in n:
-#             s += 20
-#         if "fixed" in n:
-#             s += 10
-#         return s
-
-#     cands.sort(key=score, reverse=True)
-#     print(f"[info] USD_PATH={str(cands[0])}", flush=True)
-#     return str(cands[0])
-
-def auto_usd_path() -> str:
-    p = r"D:\Project\RLCPG\quadraped_RL_CPG\bittle\bittle.usd"
-    print(f"[info] USD_PATH={p}", flush=True)
-    return p
-# ============================================================
-# CPG: Phase Oscillator Network (Kuramoto-like with desired offsets)
-# ============================================================
-LEG_ORDER = ["LF", "RF", "LB", "RB"]  # fixed order in this script
-LEG_IDX = {n: i for i, n in enumerate(LEG_ORDER)}
+def clamp(x: float, lo: float, hi: float) -> float:
+    return lo if x < lo else (hi if x > hi else x)
 
 
 @dataclass
 class CPGParams:
     freq_hz: float = 2.4          # base frequency
     K: float = 6.0                # coupling strength
-    duty: float = 0.60            # stance fraction (0.5 = symmetric)
+    duty: float = 0.50            # stance fraction (0.5 symmetric)
     ramp_time: float = 1.5        # amplitude ramp (s)
 
     # joint-space mapping gains
     A_sh: float = 0.22            # shoulder amplitude
     A_kn: float = 0.18            # knee lift amplitude
-    knee_phase_bias: float = 0.60 * math.pi  # bias between hip swing and knee lift
 
-    # limits (keep conservative)
-    SHOULDER_LIM: tuple = (-1.2, 1.2)
-    KNEE_LIM: tuple = (-1.6, 1.6)
+    # conservative joint clamps
+    SHOULDER_LIM: tuple[float, float] = (-1.2, 1.2)
+    KNEE_LIM: tuple[float, float] = (-1.6, 1.6)
 
 
 class PhaseCPG:
     """
     4-oscillator network with fixed desired phase offsets for trot.
 
-    theta_i dot = omega + Σ_j K_ij * sin(theta_j - theta_i - des_ij)
+    Leg order: [LF, RF, LB, RB]
+    Desired phases: LF=0, RF=pi, LB=pi, RB=0
     """
-
     def __init__(self, params: CPGParams):
         self.p = params
         self.omega = 2.0 * math.pi * self.p.freq_hz
+        self.theta = [0.0, math.pi, math.pi, 0.0]
 
-        # desired offsets: des[i,j] = desired (theta_j - theta_i)
+        des_phase = [0.0, math.pi, math.pi, 0.0]
         self.des = [[0.0 for _ in range(4)] for _ in range(4)]
-        self._build_trot_offsets()
-
-        # coupling weights
-        self.K = [[0.0 for _ in range(4)] for _ in range(4)]
         for i in range(4):
             for j in range(4):
-                if i != j:
-                    self.K[i][j] = self.p.K
-
-        # state
-        self.theta = [0.0, 0.0, 0.0, 0.0]
-
-    def _build_trot_offsets(self):
-        # Trot:
-        # Group A: LF & RB in-phase
-        # Group B: RF & LB in-phase
-        # Group B is pi out of phase with Group A
-        LF, RF, LB, RB = (LEG_IDX["LF"], LEG_IDX["RF"], LEG_IDX["LB"], LEG_IDX["RB"])
-
-        # set absolute target phase (for init convenience)
-        target = [0.0, math.pi, math.pi, 0.0]  # [LF, RF, LB, RB]
-        for i in range(4):
-            for j in range(4):
-                self.des[i][j] = wrap_mpi_pi(target[j] - target[i])
-
-    def reset(self, theta_init=None):
-        if theta_init is None:
-            # default stable trot init
-            self.theta = [0.0, math.pi, math.pi, 0.0]  # [LF, RF, LB, RB]
-        else:
-            assert len(theta_init) == 4
-            self.theta = [wrap_0_2pi(float(x)) for x in theta_init]
+                self.des[i][j] = des_phase[j] - des_phase[i]
 
     def step(self, dt: float):
-        # one Euler step
-        th = self.theta[:]  # snapshot
-        th_dot = [self.omega, self.omega, self.omega, self.omega]
-
+        dtheta = [self.omega for _ in range(4)]
         for i in range(4):
-            csum = 0.0
+            coup = 0.0
             for j in range(4):
                 if i == j:
                     continue
-                # coupling drives (theta_j - theta_i) -> des[i][j]
-                e = th[j] - th[i] - self.des[i][j]
-                csum += self.K[i][j] * math.sin(e)
-            th_dot[i] = self.omega + csum
+                coup += math.sin(self.theta[j] - self.theta[i] - self.des[i][j])
+            dtheta[i] += self.p.K * coup
 
         for i in range(4):
-            self.theta[i] = wrap_0_2pi(self.theta[i] + dt * th_dot[i])
+            self.theta[i] = (self.theta[i] + dtheta[i] * dt) % (2.0 * math.pi)
 
-        return th_dot
-
-    def phase_errors(self):
-        # return a few key errors in (-pi,pi]
-        th = self.theta
-        LF, RF, LB, RB = (LEG_IDX["LF"], LEG_IDX["RF"], LEG_IDX["LB"], LEG_IDX["RB"])
-
-        def err(i, j):
-            return wrap_mpi_pi((th[j] - th[i]) - self.des[i][j])
-
-        return {
-            "LF-RB(0)": err(LF, RB),
-            "RF-LB(0)": err(RF, LB),
-            "LF-RF(pi)": err(LF, RF),
-            "LF-LB(pi)": err(LF, LB),
-        }
+    def get_theta(self):
+        return self.theta[:]
 
 
-# ============================================================
-# Waveform shaping + joint mapping
-# ============================================================
 def duty_warp(theta: float, duty: float) -> float:
     """
-    Warp oscillator phase theta (uniform in time) into psi so that:
-      - swing (sin(psi) > 0, psi in [0, pi)) occupies (1-duty) time
-      - stance (sin(psi) < 0, psi in [pi, 2pi)) occupies duty time
-    This keeps your "knee lift when sin>0" logic but allows duty != 0.5.
+    Warp phase to get duty-shaped stance vs swing.
+
+    - stance fraction = duty in (0,1)
+    - returns warped phase psi in [0, 2pi)
     """
-    duty = clampf(duty, 0.05, 0.95)
+    duty = clamp(duty, 1e-3, 1.0 - 1e-3)
     twopi = 2.0 * math.pi
-    theta = wrap_0_2pi(theta)
+    u = (theta % twopi) / twopi  # [0,1)
 
-    T_swing = twopi * (1.0 - duty)  # time fraction for psi in [0, pi)
-    T_stance = twopi * duty         # time fraction for psi in [pi, 2pi)
-
-    if theta < T_swing:
-        # map [0, T_swing) -> [0, pi)
-        psi = (theta / T_swing) * math.pi
+    if u < duty:
+        v = (u / duty) * 0.5
     else:
-        # map [T_swing, 2pi) -> [pi, 2pi)
-        psi = math.pi + ((theta - T_swing) / T_stance) * math.pi
-
-    return wrap_0_2pi(psi)
+        v = 0.5 + ((u - duty) / (1.0 - duty)) * 0.5
+    return v * twopi
 
 
-@dataclass
-class JointMap:
-    # indices in robot joint array
-    LF_sh: int
-    RF_sh: int
-    LB_sh: int
-    RB_sh: int
-    LF_kn: int
-    RF_kn: int
-    LB_kn: int
-    RB_kn: int
+def quat_to_yaw(qw: float, qx: float, qy: float, qz: float) -> float:
+    # yaw from quat (w,x,y,z)
+    return math.atan2(2.0 * (qw * qz + qx * qy), 1.0 - 2.0 * (qy * qy + qz * qz))
 
+def setup_ground_and_lighting():
+    import isaaclab.sim as sim_utils
+    from pxr import UsdGeom, UsdLux, Sdf
+    from omni.physx.scripts import physicsUtils
 
-def build_joint_map(robot: Articulation) -> JointMap:
-    name_to_idx = {n: i for i, n in enumerate(robot.joint_names)}
-    return JointMap(
-        LB_sh=name_to_idx["left_back_shoulder_joint"],
-        LF_sh=name_to_idx["left_front_shoulder_joint"],
-        RB_sh=name_to_idx["right_back_shoulder_joint"],
-        RF_sh=name_to_idx["right_front_shoulder_joint"],
-        LB_kn=name_to_idx["left_back_knee_joint"],
-        LF_kn=name_to_idx["left_front_knee_joint"],
-        RB_kn=name_to_idx["right_back_knee_joint"],
-        RF_kn=name_to_idx["right_front_knee_joint"],
-    )
+    stage = sim_utils.get_current_stage()
 
+    # -----------------------
+    # 1) Visible ground mesh (for rendering)
+    # -----------------------
+    # Create a large plane mesh as a thin cube (always visible, receives shadows)
+    ground_path = Sdf.Path("/World/Ground")
+    cube = UsdGeom.Cube.Define(stage, ground_path)
+    cube.GetSizeAttr().Set(1.0)
 
-# ============================================================
-# Main
-# ============================================================
-def main():
-    # ---- IMPORTANT: reuse your working cfg ----
-    from bittle_cfg import BITTLE_CFG
+    xf = UsdGeom.Xformable(cube.GetPrim())
+    xf.ClearXformOpOrder()
+    xf.AddTranslateOp().Set((0.0, 0.0, -0.001))   # slightly below z=0
+    xf.AddScaleOp().Set((50.0, 50.0, 0.001))      # 100m x 100m, very thin
 
-    # ----------------------------
-    # Params (allow env overrides)
-    # ----------------------------
-    p = CPGParams(
-        freq_hz=env_float("CPG_FREQ_HZ", 2.4),
-        K=env_float("CPG_K", 6.0),
-        duty=env_float("CPG_DUTY", 0.50),
-        ramp_time=env_float("CPG_RAMP", 1.5),
-        A_sh=env_float("CPG_A_SH", 0.6),
-        A_kn=env_float("CPG_A_KN", 0.9),
-        knee_phase_bias=env_float("CPG_KNEE_BIAS", 0.60 * math.pi),
-    )
-
-    settle_time = env_float("CPG_SETTLE", 0.6)
-    T_END = env_float("CPG_T_END", 20.0)
-
-    # simulation
-    sim_cfg = sim_utils.SimulationCfg(dt=1.0 / 120.0)
-    sim = SimulationContext(sim_cfg)
-    sim.set_camera_view([1.2, 1.2, 0.8], [0.0, 0.0, 0.2])
-
-    spawn_ground_and_light()
-
-    # spawn robot
-    cfg = BITTLE_CFG.copy()
-    cfg.prim_path = "/World/Bittle"
+    # -----------------------
+    # 2) Physics ground plane (for collision)
+    # -----------------------
+    # This ensures physics contact even if render mesh is changed later.
     try:
-        cfg.spawn.usd_path = auto_usd_path()
+        physicsUtils.add_ground_plane(
+            stage=stage,
+            planePath="/World/PhysicsGroundPlane",
+            axis="Z",
+            size=2000.0,
+            position=(0.0, 0.0, 0.0),
+        )
     except Exception:
+        # some versions have different signature; ignore if already exists
         pass
 
-    robot = Articulation(cfg=cfg)
+    # -----------------------
+    # 3) Lighting + shadows
+    # -----------------------
+    dome_prim = stage.DefinePrim(Sdf.Path("/World/DomeLight"), "DomeLight")
+    dome = UsdLux.DomeLight(dome_prim)
+    dome.CreateIntensityAttr(1500.0)
 
+    sun_prim = stage.DefinePrim(Sdf.Path("/World/SunLight"), "DistantLight")
+    sun = UsdLux.DistantLight(sun_prim)
+    sun.CreateIntensityAttr(3000.0)
+    # rotate sun a bit so shadows appear clearly
+    sun_xf = UsdGeom.Xformable(sun_prim)
+    sun_xf.ClearXformOpOrder()
+    sun_xf.AddRotateXYZOp().Set((-45.0, 0.0, 45.0))
+
+def main():
+    # IsaacLab imports AFTER SimulationApp
+    import isaaclab.sim as sim_utils
+    from isaaclab.sim import SimulationCfg, SimulationContext
+    from isaaclab.assets import Articulation
+
+    from bittle_cfg import BITTLE_CFG, STAND_JOINT_POS
+
+    # ------------------------------------------------------------
+    # Simulation setup
+    # ------------------------------------------------------------
+    sim_cfg = SimulationCfg(dt=1 / 120.0)
+    sim = SimulationContext(sim_cfg)
     sim.reset()
-    sim.step()
-    dt = float(sim.get_physics_dt())
-    robot.update(dt)
+    setup_ground_and_lighting()
+    from pxr import UsdGeom
+    import isaaclab.sim as sim_utils
 
-    # reset to default
-    default_root = robot.data.default_root_state.clone()
-    default_q = robot.data.default_joint_pos.clone()
-    default_qd = robot.data.default_joint_vel.clone()
+    stage = sim_utils.get_current_stage()
 
-    robot.write_root_pose_to_sim(default_root[:, :7])
-    robot.write_root_velocity_to_sim(default_root[:, 7:])
-    robot.write_joint_state_to_sim(default_q, default_qd)
-    robot.write_data_to_sim()
+    # Enable PhysX debug visualization (collision shapes/contact)
+    dbg = stage.DefinePrim("/World/PhysxDebug", "Scope")
 
-    for _ in range(2):
-        sim.step()
-        robot.update(dt)
+    try:
+        import omni.physx as physx
+        iface = physx.get_physx_interface()
+        # Turn on debug visualization flags (works across many versions)
+        iface.set_visualization_parameter("COLLISION_SHAPES", 1)
+        iface.set_visualization_parameter("CONTACT_POINTS", 1)
+        iface.set_visualization_parameter("CONTACT_NORMALS", 1)
+    except Exception as e:
+        print("[warn] physx debug vis not available:", e, flush=True)
+    # ------------------------------------------------------------
+    # Spawn robot (IMPORTANT: do NOT override usd_path here)
+    # ------------------------------------------------------------
+    cfg = BITTLE_CFG.copy()
+    cfg.prim_path = "/World/Bittle/bittle"  # <<<<<< FIX: articulation root at /bittle
 
+    robot = Articulation(cfg=cfg)
+    sim.reset()
+
+    # reset to defaults (written to sim)
     robot.reset()
+    robot.write_root_state_to_sim(robot.data.default_root_state)
+    robot.write_joint_state_to_sim(robot.data.default_joint_pos, robot.data.default_joint_vel)
 
-    # joint indices
-    jm = build_joint_map(robot)
+    # warm-up
+    for _ in range(2):
+        robot.write_data_to_sim()
+        sim.step()
+        robot.update(sim_cfg.dt)
 
-    # stand target
-    q_stand = default_q.clone()
+    # ------------------------------------------------------------
+    # Build name->idx mapping
+    # ------------------------------------------------------------
+    joint_names = list(robot.joint_names)
+    name_to_idx = {n: i for i, n in enumerate(joint_names)}
 
-    # settle
-    settle_steps = int(settle_time / dt)
-    for _ in range(settle_steps):
+    # ------------------------------------------------------------
+    # Settle phase: hold stand pose
+    # ------------------------------------------------------------
+    settle_time = env_float("SETTLE_TIME", 0.6)
+    n_settle = int(settle_time / sim_cfg.dt)
+
+    # IMPORTANT: joint tensors are (num_envs, num_joints)
+    q_stand = robot.data.default_joint_pos.clone()
+    for name, val in STAND_JOINT_POS.items():
+        if name in name_to_idx:
+            q_stand[0, name_to_idx[name]] = float(val)
+
+    for _ in range(n_settle):
         robot.set_joint_position_target(q_stand)
         robot.write_data_to_sim()
         sim.step()
-        robot.update(dt)
+        robot.update(sim_cfg.dt)
 
-    # ----------------------------
-    # CPG init
-    # ----------------------------
-    cpg = PhaseCPG(p)
-    cpg.reset()  # [LF, RF, LB, RB] = [0, pi, pi, 0]
-
-    # side mirror (your proven convention)
-    # left legs +1, right legs -1
-    side_sign = {
-        "LF": +1.0,
-        "LB": +1.0,
-        "RF": -1.0,
-        "RB": -1.0,
-    }
-
-    # knee sign (from your stable version)
-    knee_sign = {
-        "LF": +1.0,
-        "LB": +1.0,
-        "RF": -1.0,
-        "RB": -1.0,
-    }
-
-    # debug cadence
-    dbg_fast = EveryN(1)     # first 1s: every step
-    dbg_slow = EveryN(30)    # afterwards: ~0.25s at 120Hz
-
-    t = 0.0
-    step = 0
-
-    # Pre-pack index access for speed/clarity
-    sh_idx = {"LF": jm.LF_sh, "RF": jm.RF_sh, "LB": jm.LB_sh, "RB": jm.RB_sh}
-    kn_idx = {"LF": jm.LF_kn, "RF": jm.RF_kn, "LB": jm.LB_kn, "RB": jm.RB_kn}
-
-    print(
-        f"[CPGv2] dt={dt:.6f}  freq_hz={p.freq_hz:.3f}  K={p.K:.3f}  duty={p.duty:.2f}  "
-        f"A_sh={p.A_sh:.3f}  A_kn={p.A_kn:.3f}  knee_bias={p.knee_phase_bias/math.pi:.2f}π",
-        flush=True,
+    # ------------------------------------------------------------
+    # CPG params (env overrides)
+    # ------------------------------------------------------------
+    p = CPGParams(
+        freq_hz=env_float("CPG_FREQ", 2.4),
+        K=env_float("CPG_K", 6.0),
+        duty=env_float("CPG_DUTY", 0.50),
+        ramp_time=env_float("CPG_RAMP", 1.5),
+        A_sh=env_float("CPG_A_SH", 0.22),
+        A_kn=env_float("CPG_A_KN", 0.18),
     )
+    cpg = PhaseCPG(p)
 
-    while simulation_app.is_running() and t < T_END:
-        # amplitude ramp
-        ramp = clampf(t / p.ramp_time, 0.0, 1.0)
+    # joint index map
+    jmap = {
+        "LF_sh": name_to_idx["left_front_shoulder_joint"],
+        "RF_sh": name_to_idx["right_front_shoulder_joint"],
+        "LB_sh": name_to_idx["left_back_shoulder_joint"],
+        "RB_sh": name_to_idx["right_back_shoulder_joint"],
+        "LF_kn": name_to_idx["left_front_knee_joint"],
+        "RF_kn": name_to_idx["right_front_knee_joint"],
+        "LB_kn": name_to_idx["left_back_knee_joint"],
+        "RB_kn": name_to_idx["right_back_knee_joint"],
+    }
 
-        # CPG update
-        th_dot = cpg.step(dt)
-        th = cpg.theta[:]  # [LF, RF, LB, RB]
+    # left/right mirror sign handling (keep your previous convention)
+    side = {"LF": +1.0, "LB": +1.0, "RF": -1.0, "RB": -1.0}
 
-        # build targets
+    # ------------------------------------------------------------
+    # Run
+    # ------------------------------------------------------------
+    T = env_float("RUN_TIME", 20.0)
+    steps = int(T / sim_cfg.dt)
+    dbg_stride = max(1, int(0.25 / sim_cfg.dt))
+
+    for step in range(steps):
+        t = step * sim_cfg.dt
+        ramp = clamp(t / p.ramp_time, 0.0, 1.0)
+
+        # update CPG
+        cpg.step(sim_cfg.dt)
+        theta = cpg.get_theta()  # [LF, RF, LB, RB]
+
+        # duty warp + signals
+        psi = [duty_warp(th, p.duty) for th in theta]
+        hip_sig = [math.sin(x) for x in psi]
+        lift_sig = [max(0.0, s) for s in hip_sig]  # lift only on positive half
+
+        # targets (clone 2D tensor)
         q_tgt = q_stand.clone()
 
-        # per-leg signals
-        hip_sig = {}
-        lift_sig = {}
-        psi_leg = {}
-
-        for leg in LEG_ORDER:
-            i = LEG_IDX[leg]
-            psi = duty_warp(th[i], p.duty)
-            psi_leg[leg] = psi
-
-            # hip swing signal (centered)
-            s = math.sin(psi)
-            hip_sig[leg] = s
-
-            # knee lift only during swing (sin>0) but smooth
-            lift = smooth_relu(hip_sig[leg])
-            lift_sig[leg] = lift
-
-        # shoulders
-        for leg in LEG_ORDER:
-            q_tgt[0, sh_idx[leg]] += ramp * (side_sign[leg] * p.A_sh * hip_sig[leg])
+        # shoulders (2D indexing!)
+        q_tgt[0, jmap["LF_sh"]] = q_stand[0, jmap["LF_sh"]] + ramp * (p.A_sh * hip_sig[0] * side["LF"])
+        q_tgt[0, jmap["RF_sh"]] = q_stand[0, jmap["RF_sh"]] + ramp * (p.A_sh * hip_sig[1] * side["RF"])
+        q_tgt[0, jmap["LB_sh"]] = q_stand[0, jmap["LB_sh"]] + ramp * (p.A_sh * hip_sig[2] * side["LB"])
+        q_tgt[0, jmap["RB_sh"]] = q_stand[0, jmap["RB_sh"]] + ramp * (p.A_sh * hip_sig[3] * side["RB"])
 
         # knees (lift)
-        for leg in LEG_ORDER:
-            q_tgt[0, kn_idx[leg]] += ramp * (knee_sign[leg] * p.A_kn * lift_sig[leg])
+        q_tgt[0, jmap["LF_kn"]] = q_stand[0, jmap["LF_kn"]] + ramp * (p.A_kn * lift_sig[0] * side["LF"])
+        q_tgt[0, jmap["RF_kn"]] = q_stand[0, jmap["RF_kn"]] + ramp * (p.A_kn * lift_sig[1] * side["RF"])
+        q_tgt[0, jmap["LB_kn"]] = q_stand[0, jmap["LB_kn"]] + ramp * (p.A_kn * lift_sig[2] * side["LB"])
+        q_tgt[0, jmap["RB_kn"]] = q_stand[0, jmap["RB_kn"]] + ramp * (p.A_kn * lift_sig[3] * side["RB"])
 
-        # clamp
-        for leg in LEG_ORDER:
-            j = sh_idx[leg]
-            q_tgt[0, j] = clampf(float(q_tgt[0, j]), p.SHOULDER_LIM[0], p.SHOULDER_LIM[1])
-        for leg in LEG_ORDER:
-            j = kn_idx[leg]
-            q_tgt[0, j] = clampf(float(q_tgt[0, j]), p.KNEE_LIM[0], p.KNEE_LIM[1])
+        # clamp (2D indexing!)
+        for k in ("LF_sh", "RF_sh", "LB_sh", "RB_sh"):
+            i = jmap[k]
+            q_tgt[0, i] = clamp(float(q_tgt[0, i]), p.SHOULDER_LIM[0], p.SHOULDER_LIM[1])
+        for k in ("LF_kn", "RF_kn", "LB_kn", "RB_kn"):
+            i = jmap[k]
+            q_tgt[0, i] = clamp(float(q_tgt[0, i]), p.KNEE_LIM[0], p.KNEE_LIM[1])
 
-        # ----- APPLY (critical order) -----
+        # send targets
         robot.set_joint_position_target(q_tgt)
         robot.write_data_to_sim()
         sim.step()
-        robot.update(dt)
+        robot.update(sim_cfg.dt)
 
-        # ----- DEBUG PRINT -----
-        do_print = dbg_fast.hit() if t < 1.0 else dbg_slow.hit()
-        if do_print:
+        # debug print (matches your style)
+        if step > 0 and step % dbg_stride == 0:
             rs = robot.data.root_state_w[0]
-            yaw = quat_to_yaw_xyzw(rs[3:7])
-            pos = robot.data.root_state_w[0, 0:3]
+            x, y, z = rs[0].item(), rs[1].item(), rs[2].item()
+            qw, qx, qy, qz = rs[3].item(), rs[4].item(), rs[5].item(), rs[6].item()
+            yaw = quat_to_yaw(qw, qx, qy, qz)
 
-            # phase errors (how well coupling holds the trot)
-            pe = cpg.phase_errors()
+            # phase check
+            phase_err_lf_rb = ((theta[0] - theta[3] + math.pi) % (2 * math.pi)) - math.pi
+            phase_err_rf_lb = ((theta[1] - theta[2] + math.pi) % (2 * math.pi)) - math.pi
+            phase_err_lf_rf = ((theta[0] - theta[1] + math.pi) % (2 * math.pi)) - math.pi
+            phase_err_lf_lb = ((theta[0] - theta[2] + math.pi) % (2 * math.pi)) - math.pi
 
-            # targets vs stand
+            # deltas for debug (target - stand), using 2D indexing
+            sh_dlt = [
+                float(q_tgt[0, jmap["LF_sh"]] - q_stand[0, jmap["LF_sh"]]),
+                float(q_tgt[0, jmap["RF_sh"]] - q_stand[0, jmap["RF_sh"]]),
+                float(q_tgt[0, jmap["LB_sh"]] - q_stand[0, jmap["LB_sh"]]),
+                float(q_tgt[0, jmap["RB_sh"]] - q_stand[0, jmap["RB_sh"]]),
+            ]
+            kn_dlt = [
+                float(q_tgt[0, jmap["LF_kn"]] - q_stand[0, jmap["LF_kn"]]),
+                float(q_tgt[0, jmap["RF_kn"]] - q_stand[0, jmap["RF_kn"]]),
+                float(q_tgt[0, jmap["LB_kn"]] - q_stand[0, jmap["LB_kn"]]),
+                float(q_tgt[0, jmap["RB_kn"]] - q_stand[0, jmap["RB_kn"]]),
+            ]
+
+            # actual joint pos (2D)
             q_act = robot.data.joint_pos[0]
+            sh_act = [
+                float(q_act[jmap["LF_sh"]]),
+                float(q_act[jmap["RF_sh"]]),
+                float(q_act[jmap["LB_sh"]]),
+                float(q_act[jmap["RB_sh"]]),
+            ]
+            kn_act = [
+                float(q_act[jmap["LF_kn"]]),
+                float(q_act[jmap["RF_kn"]]),
+                float(q_act[jmap["LB_kn"]]),
+                float(q_act[jmap["RB_kn"]]),
+            ]
 
-            sh_stand = torch.tensor(
-                [q_stand[0, sh_idx["LF"]], q_stand[0, sh_idx["RF"]], q_stand[0, sh_idx["LB"]], q_stand[0, sh_idx["RB"]]]
-            )
-            kn_stand = torch.tensor(
-                [q_stand[0, kn_idx["LF"]], q_stand[0, kn_idx["RF"]], q_stand[0, kn_idx["LB"]], q_stand[0, kn_idx["RB"]]]
-            )
-
-            sh_tgt = torch.tensor(
-                [q_tgt[0, sh_idx["LF"]], q_tgt[0, sh_idx["RF"]], q_tgt[0, sh_idx["LB"]], q_tgt[0, sh_idx["RB"]]]
-            )
-            kn_tgt = torch.tensor(
-                [q_tgt[0, kn_idx["LF"]], q_tgt[0, kn_idx["RF"]], q_tgt[0, kn_idx["LB"]], q_tgt[0, kn_idx["RB"]]]
-            )
-
-            sh_act = torch.tensor(
-                [q_act[sh_idx["LF"]], q_act[sh_idx["RF"]], q_act[sh_idx["LB"]], q_act[sh_idx["RB"]]]
-            )
-            kn_act = torch.tensor(
-                [q_act[kn_idx["LF"]], q_act[kn_idx["RF"]], q_act[kn_idx["LB"]], q_act[kn_idx["RB"]]]
-            )
-
-            sh_dlt = sh_tgt - sh_stand
-            kn_dlt = kn_tgt - kn_stand
-
-            theta_vec = torch.tensor(th, dtype=torch.float32)
-            thdot_vec = torch.tensor(th_dot, dtype=torch.float32)
-
-            print(f"\n--- step={step} t={t:.3f}s ramp={ramp:.2f} yaw={float(yaw):+0.3f} "
-                  f"root_xy=({float(pos[0]):+0.3f},{float(pos[1]):+0.3f}) z={float(pos[2]):+0.3f} ---", flush=True)
-
-            print(f"theta[LF,RF,LB,RB]={_fmt4(theta_vec)}  theta_dot(rad/s)={_fmt4(thdot_vec)}", flush=True)
             print(
-                f"phase_err: LF-RB={pe['LF-RB(0)']:+0.3f}  RF-LB={pe['RF-LB(0)']:+0.3f}  "
-                f"LF-RF={pe['LF-RF(pi)']:+0.3f}  LF-LB={pe['LF-LB(pi)']:+0.3f}",
+                f"--- step={step} t={t:.3f}s ramp={ramp:.2f} yaw={yaw:+.3f} root_xy=({x:+.3f},{y:+.3f}) z={z:+.3f} ---",
+                flush=True,
+            )
+            print(
+                f"theta[LF,RF,LB,RB]=[{theta[0]:+.3f}, {theta[1]:+.3f}, {theta[2]:+.3f}, {theta[3]:+.3f}]  "
+                f"theta_dot(rad/s)=[{2*math.pi*p.freq_hz:+.3f}, {2*math.pi*p.freq_hz:+.3f}, {2*math.pi*p.freq_hz:+.3f}, {2*math.pi*p.freq_hz:+.3f}]",
+                flush=True,
+            )
+            print(
+                f"phase_err: LF-RB={phase_err_lf_rb:+.3f}  RF-LB={phase_err_rf_lb:+.3f}  LF-RF={phase_err_lf_rf:+.3f}  LF-LB={phase_err_lf_lb:+.3f}",
+                flush=True,
+            )
+            print(
+                f"psi_warp[LF,RF,LB,RB]=[{psi[0]:+.3f}, {psi[1]:+.3f}, {psi[2]:+.3f}, {psi[3]:+.3f}]",
+                flush=True,
+            )
+            print(
+                f"hip_sig[LF,RF,LB,RB]=[{hip_sig[0]:+.3f}, {hip_sig[1]:+.3f}, {hip_sig[2]:+.3f}, {hip_sig[3]:+.3f}]   "
+                f"lift_sig[LF,RF,LB,RB]=[{lift_sig[0]:+.3f}, {lift_sig[1]:+.3f}, {lift_sig[2]:+.3f}, {lift_sig[3]:+.3f}]",
+                flush=True,
+            )
+            print(
+                f"sh_dlt_tgt[LF,RF,LB,RB]=[{sh_dlt[0]:+.3f}, {sh_dlt[1]:+.3f}, {sh_dlt[2]:+.3f}, {sh_dlt[3]:+.3f}]  "
+                f"sh_act=[{sh_act[0]:+.3f}, {sh_act[1]:+.3f}, {sh_act[2]:+.3f}, {sh_act[3]:+.3f}]",
+                flush=True,
+            )
+            print(
+                f"kn_dlt_tgt[LF,RF,LB,RB]=[{kn_dlt[0]:+.3f}, {kn_dlt[1]:+.3f}, {kn_dlt[2]:+.3f}, {kn_dlt[3]:+.3f}]  "
+                f"kn_act=[{kn_act[0]:+.3f}, {kn_act[1]:+.3f}, {kn_act[2]:+.3f}, {kn_act[3]:+.3f}]",
                 flush=True,
             )
 
-            psi_vec = torch.tensor([psi_leg["LF"], psi_leg["RF"], psi_leg["LB"], psi_leg["RB"]], dtype=torch.float32)
-            hip_vec = torch.tensor([hip_sig["LF"], hip_sig["RF"], hip_sig["LB"], hip_sig["RB"]], dtype=torch.float32)
-            lift_vec = torch.tensor([lift_sig["LF"], lift_sig["RF"], lift_sig["LB"], lift_sig["RB"]], dtype=torch.float32)
-            print(f"psi_warp[LF,RF,LB,RB]={_fmt4(psi_vec)}", flush=True)
-            print(f"hip_sig[LF,RF,LB,RB]={_fmt4(hip_vec)}   lift_sig[LF,RF,LB,RB]={_fmt4(lift_vec)}", flush=True)
-
-            print(f"sh_dlt_tgt[LF,RF,LB,RB]={_fmt4(sh_dlt)}  sh_act={_fmt4(sh_act)}", flush=True)
-            print(f"kn_dlt_tgt[LF,RF,LB,RB]={_fmt4(kn_dlt)}  kn_act={_fmt4(kn_act)}", flush=True)
-
-        t += dt
-        step += 1
-
-    simulation_app.close()
+    print("[done] finished.", flush=True)
 
 
 if __name__ == "__main__":
     try:
         main()
-    except Exception as e:
-        print("!!! EXCEPTION !!!", repr(e), flush=True)
+    except Exception:
         traceback.print_exc()
     finally:
-        try:
-            simulation_app.close()
-        except Exception:
-            pass
+        simulation_app.close()

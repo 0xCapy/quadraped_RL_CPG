@@ -1,0 +1,18 @@
+START
+static_json = D:\Project\RLCPG\quadraped_RL_CPG\script\tem_doc\bittle_shoulderpatch_toeproxy_static_math_rebuild.json
+FAILED
+FileNotFoundError(2, 'No such file or directory')
+Traceback (most recent call last):
+  File "D:\Project\RLCPG\quadraped_RL_CPG\script\Baseline.py", line 289, in main
+    static_model = load_static_math(static_json_path)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Project\RLCPG\quadraped_RL_CPG\script\Baseline.py", line 151, in load_static_math
+    data = json.loads(path.read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\IsaacLab\_isaac_sim\kit\python\Lib\pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\IsaacLab\_isaac_sim\kit\python\Lib\pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Project\\RLCPG\\quadraped_RL_CPG\\script\\tem_doc\\bittle_shoulderpatch_toeproxy_static_math_rebuild.json'

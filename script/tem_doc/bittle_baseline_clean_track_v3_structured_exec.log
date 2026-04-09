@@ -1,0 +1,9 @@
+START
+usd_path = D:/Project/RLCPG/quadraped_RL_CPG/bittle/configuration/bittle_shoulderpatch_toeproxy.usd
+prim_path = /World/bittle
+device = cuda:0
+SUCCESS
+metrics_csv = D:\Project\RLCPG\quadraped_RL_CPG\script\tem_doc\bittle_baseline_clean_track_v3_structured_metrics.csv
+foot_traj_csv = D:\Project\RLCPG\quadraped_RL_CPG\script\tem_doc\bittle_baseline_clean_track_v3_structured_foot_traj.csv
+run_info_txt = D:\Project\RLCPG\quadraped_RL_CPG\script\tem_doc\bittle_baseline_clean_track_v3_structured_run_info.txt
+exec_log = D:\Project\RLCPG\quadraped_RL_CPG\script\tem_doc\bittle_baseline_clean_track_v3_structured_exec.log

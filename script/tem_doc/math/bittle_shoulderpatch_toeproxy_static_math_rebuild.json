@@ -1,0 +1,479 @@
+{
+  "usd_path": "D:\\Project\\RLCPG\\quadraped_RL_CPG\\bittle\\configuration\\bittle_shoulderpatch_toeproxy.usd",
+  "default_prim": "/bittle",
+  "cfg_reference_joint_pose": {
+    "left_front_shoulder_joint": 0.8,
+    "right_front_shoulder_joint": -0.8,
+    "left_back_shoulder_joint": 0.8,
+    "right_back_shoulder_joint": -0.8,
+    "left_front_knee_joint": 0.29999999999999993,
+    "right_front_knee_joint": -0.29999999999999993,
+    "left_back_knee_joint": 0.29999999999999993,
+    "right_back_knee_joint": -0.29999999999999993
+  },
+  "joints": {
+    "LF_sh": {
+      "name": "left_front_shoulder_joint",
+      "path": "/bittle/joints/left_front_shoulder_joint",
+      "localPos0": [
+        -0.44872498512268066,
+        0.5226399898529053,
+        -0.02102000080049038
+      ],
+      "localPos1": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localRot0": [
+        0.49999821186065674,
+        0.5,
+        -0.500001847743988,
+        -0.5
+      ],
+      "localRot1": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": "Z",
+      "lower": -90.00020599365234,
+      "upper": 69.99996948242188,
+      "body0": [
+        "/bittle/base_frame_link"
+      ],
+      "body1": [
+        "/bittle/left_front_shoulder_link"
+      ]
+    },
+    "RF_sh": {
+      "name": "right_front_shoulder_joint",
+      "path": "/bittle/joints/right_front_shoulder_joint",
+      "localPos0": [
+        0.44872498512268066,
+        0.5226399898529053,
+        -0.02102000080049038
+      ],
+      "localPos1": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localRot0": [
+        0.49999821186065674,
+        -0.5,
+        0.500001847743988,
+        -0.5
+      ],
+      "localRot1": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": "Z",
+      "lower": -90.00020599365234,
+      "upper": 69.99996948242188,
+      "body0": [
+        "/bittle/base_frame_link"
+      ],
+      "body1": [
+        "/bittle/right_front_shoulder_link"
+      ]
+    },
+    "LB_sh": {
+      "name": "left_back_shoulder_joint",
+      "path": "/bittle/joints/left_back_shoulder_joint",
+      "localPos0": [
+        -0.44872498512268066,
+        -0.5192300081253052,
+        -0.02102000080049038
+      ],
+      "localPos1": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localRot0": [
+        0.49999821186065674,
+        0.5,
+        -0.500001847743988,
+        -0.5
+      ],
+      "localRot1": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": "Z",
+      "lower": -90.00020599365234,
+      "upper": 69.99996948242188,
+      "body0": [
+        "/bittle/base_frame_link"
+      ],
+      "body1": [
+        "/bittle/left_back_shoulder_link"
+      ]
+    },
+    "RB_sh": {
+      "name": "right_back_shoulder_joint",
+      "path": "/bittle/joints/right_back_shoulder_joint",
+      "localPos0": [
+        0.44872498512268066,
+        -0.5192300081253052,
+        -0.02102000080049038
+      ],
+      "localPos1": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localRot0": [
+        0.49999821186065674,
+        -0.5,
+        0.500001847743988,
+        -0.5
+      ],
+      "localRot1": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": "Z",
+      "lower": -90.00020599365234,
+      "upper": 69.99996948242188,
+      "body0": [
+        "/bittle/base_frame_link"
+      ],
+      "body1": [
+        "/bittle/right_back_shoulder_link"
+      ]
+    },
+    "LF_kn": {
+      "name": "left_front_knee_joint",
+      "path": "/bittle/joints/left_front_knee_joint",
+      "localPos0": [
+        5.999999848427251e-05,
+        -0.4917199909687042,
+        0.0
+      ],
+      "localPos1": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localRot0": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localRot1": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": "Z",
+      "lower": -69.99996948242188,
+      "upper": 85.00000762939453,
+      "body0": [
+        "/bittle/left_front_shoulder_link"
+      ],
+      "body1": [
+        "/bittle/left_front_knee_link"
+      ]
+    },
+    "RF_kn": {
+      "name": "right_front_knee_joint",
+      "path": "/bittle/joints/right_front_knee_joint",
+      "localPos0": [
+        5.999999848427251e-05,
+        0.4917199909687042,
+        0.0
+      ],
+      "localPos1": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localRot0": [
+        1.2675908465098473e-06,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "localRot1": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": "Z",
+      "lower": -69.99996948242188,
+      "upper": 85.00000762939453,
+      "body0": [
+        "/bittle/right_front_shoulder_link"
+      ],
+      "body1": [
+        "/bittle/right_front_knee_link"
+      ]
+    },
+    "LB_kn": {
+      "name": "left_back_knee_joint",
+      "path": "/bittle/joints/left_back_knee_joint",
+      "localPos0": [
+        0.0,
+        -0.4917199909687042,
+        0.0
+      ],
+      "localPos1": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localRot0": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localRot1": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": "Z",
+      "lower": -69.99996948242188,
+      "upper": 85.00000762939453,
+      "body0": [
+        "/bittle/left_back_shoulder_link"
+      ],
+      "body1": [
+        "/bittle/left_back_knee_link"
+      ]
+    },
+    "RB_kn": {
+      "name": "right_back_knee_joint",
+      "path": "/bittle/joints/right_back_knee_joint",
+      "localPos0": [
+        0.0,
+        0.4917199909687042,
+        0.0
+      ],
+      "localPos1": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "localRot0": [
+        1.2675908465098473e-06,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "localRot1": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": "Z",
+      "lower": -69.99996948242188,
+      "upper": 85.00000762939453,
+      "body0": [
+        "/bittle/right_back_shoulder_link"
+      ],
+      "body1": [
+        "/bittle/right_back_knee_link"
+      ]
+    }
+  },
+  "toes": {
+    "LF": {
+      "toe_path": "/bittle/left_front_knee_link/toe_proxy",
+      "toe_local": [
+        0.028764563652343256,
+        0.5568462985818254,
+        -0.5952095860269269
+      ],
+      "toe_vec_from_knee": [
+        0.028764563652343256,
+        0.5568462985818254,
+        -0.5952095860269269
+      ],
+      "L2_full": 0.8155854655796257,
+      "L2_yz": 0.8150780646923491,
+      "toe_yz_angle_rad": 0.7521106143377917,
+      "toe_yz_angle_deg": 43.09276392854701
+    },
+    "RF": {
+      "toe_path": "/bittle/right_front_knee_link/toe_proxy",
+      "toe_local": [
+        0.028764563652343256,
+        0.5568462985818254,
+        -0.5952095860269269
+      ],
+      "toe_vec_from_knee": [
+        0.028764563652343256,
+        0.5568462985818254,
+        -0.5952095860269269
+      ],
+      "L2_full": 0.8155854655796257,
+      "L2_yz": 0.8150780646923491,
+      "toe_yz_angle_rad": 0.7521106143377917,
+      "toe_yz_angle_deg": 43.09276392854701
+    },
+    "LB": {
+      "toe_path": "/bittle/left_back_knee_link/toe_proxy",
+      "toe_local": [
+        0.028764563652343256,
+        0.5568462985818254,
+        -0.5952095860269269
+      ],
+      "toe_vec_from_knee": [
+        0.028764563652343256,
+        0.5568462985818254,
+        -0.5952095860269269
+      ],
+      "L2_full": 0.8155854655796257,
+      "L2_yz": 0.8150780646923491,
+      "toe_yz_angle_rad": 0.7521106143377917,
+      "toe_yz_angle_deg": 43.09276392854701
+    },
+    "RB": {
+      "toe_path": "/bittle/right_back_knee_link/toe_proxy",
+      "toe_local": [
+        0.028764563652343256,
+        0.5568462985818254,
+        -0.5952095860269269
+      ],
+      "toe_vec_from_knee": [
+        0.028764563652343256,
+        0.5568462985818254,
+        -0.5952095860269269
+      ],
+      "L2_full": 0.8155854655796257,
+      "L2_yz": 0.8150780646923491,
+      "toe_yz_angle_rad": 0.7521106143377917,
+      "toe_yz_angle_deg": 43.09276392854701
+    }
+  },
+  "pair_checks": {
+    "front_shoulder_mirror": {
+      "target": [
+        0.44872498512268066,
+        0.5226399898529053,
+        -0.02102000080049038
+      ],
+      "err": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "norm": 0.0
+    },
+    "back_shoulder_mirror": {
+      "target": [
+        0.44872498512268066,
+        -0.5192300081253052,
+        -0.02102000080049038
+      ],
+      "err": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "norm": 0.0
+    },
+    "front_knee_mirror": {
+      "target": [
+        5.999999848427251e-05,
+        0.4917199909687042,
+        0.0
+      ],
+      "err": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "norm": 0.0
+    },
+    "back_knee_mirror": {
+      "target": [
+        0.0,
+        0.4917199909687042,
+        0.0
+      ],
+      "err": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "norm": 0.0
+    },
+    "L1_left_front": 0.491719994629324,
+    "L1_right_front": 0.491719994629324,
+    "L1_left_back": 0.4917199909687042,
+    "L1_right_back": 0.4917199909687042,
+    "toe_equal_vs_LF_RF": {
+      "reference": [
+        0.028764563652343256,
+        0.5568462985818254,
+        -0.5952095860269269
+      ],
+      "err": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "norm": 0.0
+    },
+    "toe_equal_vs_LF_LB": {
+      "reference": [
+        0.028764563652343256,
+        0.5568462985818254,
+        -0.5952095860269269
+      ],
+      "err": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "norm": 0.0
+    },
+    "toe_equal_vs_LF_RB": {
+      "reference": [
+        0.028764563652343256,
+        0.5568462985818254,
+        -0.5952095860269269
+      ],
+      "err": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "norm": 0.0
+    }
+  },
+  "recommended_symmetric_model": {
+    "note": "Use these as the next static mathematical basis for FK/IK/CPG, not guessed L2 values.",
+    "L1_sym": 0.4917199927990141,
+    "toe_vec_from_knee_sym": [
+      0.028764563652343256,
+      0.5568462985818254,
+      -0.5952095860269269
+    ],
+    "toe_x_sym": 0.028764563652343256,
+    "toe_y_sym": 0.5568462985818254,
+    "toe_z_sym": -0.5952095860269269,
+    "L2_full_sym": 0.8155854655796257,
+    "L2_yz_sym": 0.8150780646923491,
+    "toe_yz_angle_sym_rad": 0.7521106143377917,
+    "toe_yz_angle_sym_deg": 43.09276392854701
+  }
+}

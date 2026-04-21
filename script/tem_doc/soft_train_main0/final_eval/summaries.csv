@@ -1,0 +1,5 @@
+env_id,success,done_reason_code,done_reason,duration_sec,survival_ratio,v_cmd_mean,v_fwd_mean,v_fwd_rmse,yaw_drift_abs_final,yaw_rate_abs_mean,roll_rms,pitch_rms,tilt_rms,vertical_bounce_rms,base_z_min,contact_continuity_score,diag_support_asym_score,swing_scuff_count,residual_rms,residual_rate_rms,joint_vel_rms,return_total
+0,0,0,running,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,inf,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+1,0,0,running,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,inf,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2,0,0,running,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,inf,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+3,0,0,running,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,inf,0.0,0.0,0.0,0.0,0.0,0.0,0.0

@@ -1,0 +1,114 @@
+[soft-stage 05:18:51] main | args parsed | mode=train
+[soft-stage 05:18:51] main | resolved num_envs=16
+[soft-stage 05:18:51] main | create AppLauncher
+[soft-stage 05:18:56] main | AppLauncher created
+[soft-stage 05:18:56] train_mode | start
+[soft-stage 05:18:56] load_soft_env_components | start
+[soft-stage 05:18:56] load_soft_env_components | imported RLstage_A_env
+[soft-stage 05:18:56] load_soft_env_components | imported isaaclab sim/assets/sensors
+[soft-stage 05:18:56] load_soft_env_components | done
+[soft-stage 05:18:56] train_mode | config built
+[soft-stage 05:18:56] train_mode | create env
+[soft-stage 05:18:58] train_mode | env created
+[soft-stage 05:18:58] train_mode | wrap env
+[soft-stage 05:18:58] rsl_wrapper | enter
+[soft-stage 05:19:00] rsl_wrapper | imported isaaclab_rl.rsl_rl
+[soft-stage 05:19:00] rsl_wrapper | constructing wrapper (may call env.reset internally)
+[soft-stage 05:19:00] rsl_wrapper | constructed wrapper
+[soft-stage 05:19:00] train_mode | wrapped env created
+[soft-stage 05:19:00] train_mode | import OnPolicyRunner
+[soft-stage 05:19:00] train_mode | runner_cfg keys=['actor', 'algorithm', 'check_for_nan', 'class_name', 'clip_actions', 'critic', 'device', 'empirical_normalization', 'experiment_name', 'load_checkpoint', 'load_run', 'logger', 'max_iterations', 'meta', 'multi_gpu', 'neptune_project', 'num_steps_per_env', 'obs_groups', 'resume', 'run_name', 'save_interval', 'seed', 'wandb_project']
+[soft-stage 05:19:00] train_mode | algorithm keys=['class_name', 'clip_param', 'desired_kl', 'entropy_coef', 'gamma', 'lam', 'learning_rate', 'max_grad_norm', 'normalize_advantage_per_mini_batch', 'num_learning_epochs', 'num_mini_batches', 'optimizer', 'rnd_cfg', 'schedule', 'share_cnn_encoders', 'symmetry_cfg', 'use_clipped_value_loss', 'value_loss_coef']
+[soft-stage 05:19:00] train_mode | actor keys=['activation', 'class_name', 'distribution_cfg', 'hidden_dims', 'obs_normalization']
+[soft-stage 05:19:00] train_mode | critic keys=['activation', 'class_name', 'distribution_cfg', 'hidden_dims', 'obs_normalization']
+[soft-stage 05:19:00] train_mode | start heartbeat thread
+[soft-stage 05:19:00] train_mode | start metrics thread
+at_sec=20.0 | log_dir=D:\Project\RLCPG\quadraped_RL_CPG\script\tem_doc\soft_train_gait11_smoke
+[soft-stage 05:19:00] train_mode | create OnPolicyRunner
+[soft-stage 05:19:00] train_metrics | started | metrics_sec=20.0 | convergence_window=128 | log_dir=D:\Project\RLCPG\quadraped_RL_CPG\script\tem_doc\soft_train_gait11_smoke
+[soft-stage 05:19:00] train_mode | OnPolicyRunner created
+[soft-stage 05:19:00] train_mode | enter runner.learn
+[soft-stage 05:19:20] train_heartbeat | alive | elapsed=0.3 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:19:20] train_metrics | alive | no completed episodes yet
+[soft-stage 05:19:40] train_heartbeat | alive | elapsed=0.7 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:19:40] train_metrics | snapshot | completed_total=16 | window=16 | ckpts=1 | yaw_mean=0.0489 | tilt_mean=0.0229 | bounce_mean=0.1227 | scuff_mean=135.3281 | success_rate=0.938
+[soft-stage 05:20:00] train_heartbeat | alive | elapsed=1.0 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:20:00] train_metrics | snapshot | completed_total=32 | window=32 | ckpts=1 | yaw_mean=0.0421 | tilt_mean=0.0227 | bounce_mean=0.1234 | scuff_mean=135.5469 | success_rate=0.969
+[soft-stage 05:20:20] train_heartbeat | alive | elapsed=1.3 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:20:20] train_metrics | snapshot | completed_total=48 | window=48 | ckpts=1 | yaw_mean=0.0430 | tilt_mean=0.0215 | bounce_mean=0.1231 | scuff_mean=135.9948 | success_rate=0.979
+[soft-stage 05:20:40] train_heartbeat | alive | elapsed=1.7 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:20:40] train_metrics | snapshot | completed_total=64 | window=64 | ckpts=1 | yaw_mean=0.0433 | tilt_mean=0.0210 | bounce_mean=0.1227 | scuff_mean=136.1016 | success_rate=0.984
+[soft-stage 05:21:00] train_metrics | snapshot | completed_total=80 | window=80 | ckpts=1 | yaw_mean=0.0407 | tilt_mean=0.0204 | bounce_mean=0.1223 | scuff_mean=136.1219 | success_rate=0.988
+[soft-stage 05:21:20] train_heartbeat | alive | elapsed=2.3 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:21:20] train_metrics | snapshot | completed_total=96 | window=96 | ckpts=1 | yaw_mean=0.0376 | tilt_mean=0.0199 | bounce_mean=0.1220 | scuff_mean=136.2109 | success_rate=0.990
+[soft-stage 05:21:40] train_heartbeat | alive | elapsed=2.7 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:21:40] train_metrics | snapshot | completed_total=112 | window=112 | ckpts=1 | yaw_mean=0.0362 | tilt_mean=0.0193 | bounce_mean=0.1216 | scuff_mean=136.3393 | success_rate=0.991
+[soft-stage 05:22:00] train_heartbeat | alive | elapsed=3.0 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:22:00] train_metrics | snapshot | completed_total=128 | window=128 | ckpts=1 | yaw_mean=0.0365 | tilt_mean=0.0188 | bounce_mean=0.1217 | scuff_mean=136.5488 | success_rate=0.992
+[soft-stage 05:22:20] train_heartbeat | alive | elapsed=3.3 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:22:20] train_metrics | snapshot | completed_total=144 | window=128 | ckpts=1 | yaw_mean=0.0345 | tilt_mean=0.0179 | bounce_mean=0.1215 | scuff_mean=136.8770 | success_rate=1.000
+[soft-stage 05:22:40] train_heartbeat | alive | elapsed=3.7 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:22:40] train_metrics | snapshot | completed_total=160 | window=128 | ckpts=1 | yaw_mean=0.0337 | tilt_mean=0.0169 | bounce_mean=0.1210 | scuff_mean=137.1699 | success_rate=1.000
+[soft-stage 05:23:00] train_heartbeat | alive | elapsed=4.0 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:23:00] train_metrics | snapshot | completed_total=176 | window=128 | ckpts=1 | yaw_mean=0.0323 | tilt_mean=0.0163 | bounce_mean=0.1206 | scuff_mean=137.3828 | success_rate=1.000
+[soft-stage 05:23:20] train_heartbeat | alive | elapsed=4.3 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:23:20] train_metrics | snapshot | completed_total=192 | window=128 | ckpts=1 | yaw_mean=0.0294 | tilt_mean=0.0156 | bounce_mean=0.1202 | scuff_mean=137.6211 | success_rate=1.000
+[soft-stage 05:23:40] train_heartbeat | alive | elapsed=4.7 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:23:40] train_metrics | snapshot | completed_total=208 | window=128 | ckpts=1 | yaw_mean=0.0294 | tilt_mean=0.0151 | bounce_mean=0.1199 | scuff_mean=137.7148 | success_rate=1.000
+[soft-stage 05:24:00] train_heartbeat | alive | elapsed=5.0 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:24:00] train_metrics | snapshot | completed_total=224 | window=128 | ckpts=1 | yaw_mean=0.0309 | tilt_mean=0.0147 | bounce_mean=0.1195 | scuff_mean=137.9355 | success_rate=1.000
+[soft-stage 05:24:20] train_heartbeat | alive | elapsed=5.3 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:24:20] train_metrics | snapshot | completed_total=240 | window=128 | ckpts=1 | yaw_mean=0.0317 | tilt_mean=0.0144 | bounce_mean=0.1190 | scuff_mean=138.1699 | success_rate=1.000
+[soft-stage 05:24:40] train_heartbeat | alive | elapsed=5.7 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:24:40] train_metrics | snapshot | completed_total=256 | window=128 | ckpts=1 | yaw_mean=0.0311 | tilt_mean=0.0141 | bounce_mean=0.1183 | scuff_mean=138.3359 | success_rate=1.000
+[soft-stage 05:25:00] train_heartbeat | alive | elapsed=6.0 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:25:00] train_metrics | snapshot | completed_total=272 | window=128 | ckpts=1 | yaw_mean=0.0319 | tilt_mean=0.0139 | bounce_mean=0.1178 | scuff_mean=138.4336 | success_rate=1.000
+[soft-stage 05:25:20] train_heartbeat | alive | elapsed=6.3 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:25:20] train_metrics | snapshot | completed_total=288 | window=128 | ckpts=1 | yaw_mean=0.0319 | tilt_mean=0.0138 | bounce_mean=0.1173 | scuff_mean=138.5098 | success_rate=1.000
+[soft-stage 05:25:40] train_heartbeat | alive | elapsed=6.7 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:25:40] train_metrics | snapshot | completed_total=288 | window=128 | ckpts=1 | yaw_mean=0.0319 | tilt_mean=0.0138 | bounce_mean=0.1173 | scuff_mean=138.5098 | success_rate=1.000
+[soft-stage 05:26:00] train_heartbeat | alive | elapsed=7.0 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:26:00] train_metrics | snapshot | completed_total=320 | window=128 | ckpts=1 | yaw_mean=0.0311 | tilt_mean=0.0140 | bounce_mean=0.1168 | scuff_mean=139.2520 | success_rate=1.000
+[soft-stage 05:26:20] train_heartbeat | alive | elapsed=7.3 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:26:20] train_metrics | snapshot | completed_total=320 | window=128 | ckpts=1 | yaw_mean=0.0311 | tilt_mean=0.0140 | bounce_mean=0.1168 | scuff_mean=139.2520 | success_rate=1.000
+[soft-stage 05:26:40] train_heartbeat | alive | elapsed=7.7 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:26:41] train_metrics | snapshot | completed_total=336 | window=128 | ckpts=1 | yaw_mean=0.0302 | tilt_mean=0.0140 | bounce_mean=0.1168 | scuff_mean=139.8027 | success_rate=1.000
+[soft-stage 05:27:00] train_heartbeat | alive | elapsed=8.0 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:27:01] train_metrics | snapshot | completed_total=368 | window=128 | ckpts=1 | yaw_mean=0.0276 | tilt_mean=0.0141 | bounce_mean=0.1165 | scuff_mean=140.3691 | success_rate=1.000
+[soft-stage 05:27:20] train_heartbeat | alive | elapsed=8.3 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:27:21] train_metrics | snapshot | completed_total=384 | window=128 | ckpts=1 | yaw_mean=0.0271 | tilt_mean=0.0141 | bounce_mean=0.1162 | scuff_mean=140.4043 | success_rate=1.000
+[soft-stage 05:27:40] train_heartbeat | alive | elapsed=8.7 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:27:41] train_metrics | snapshot | completed_total=400 | window=128 | ckpts=1 | yaw_mean=0.0249 | tilt_mean=0.0141 | bounce_mean=0.1159 | scuff_mean=140.6113 | success_rate=1.000
+[soft-stage 05:28:00] train_heartbeat | alive | elapsed=9.0 min | checkpoints=1 | latest=model_0.pt | logdir_changed=1
+[soft-stage 05:28:01] train_metrics | snapshot | completed_total=416 | window=128 | ckpts=1 | yaw_mean=0.0239 | tilt_mean=0.0139 | bounce_mean=0.1157 | scuff_mean=140.9219 | success_rate=1.000
+[soft-stage 05:28:20] train_heartbeat | alive | elapsed=9.3 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:28:21] train_metrics | snapshot | completed_total=432 | window=128 | ckpts=2 | yaw_mean=0.0235 | tilt_mean=0.0136 | bounce_mean=0.1152 | scuff_mean=141.1152 | success_rate=1.000
+[soft-stage 05:28:40] train_heartbeat | alive | elapsed=9.7 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:28:41] train_metrics | snapshot | completed_total=448 | window=128 | ckpts=2 | yaw_mean=0.0222 | tilt_mean=0.0133 | bounce_mean=0.1150 | scuff_mean=141.1504 | success_rate=1.000
+[soft-stage 05:29:00] train_heartbeat | alive | elapsed=10.0 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:29:01] train_metrics | snapshot | completed_total=464 | window=128 | ckpts=2 | yaw_mean=0.0217 | tilt_mean=0.0130 | bounce_mean=0.1143 | scuff_mean=141.1953 | success_rate=1.000
+[soft-stage 05:29:20] train_heartbeat | alive | elapsed=10.3 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:29:21] train_metrics | snapshot | completed_total=480 | window=128 | ckpts=2 | yaw_mean=0.0203 | tilt_mean=0.0128 | bounce_mean=0.1139 | scuff_mean=141.4121 | success_rate=1.000
+[soft-stage 05:29:40] train_heartbeat | alive | elapsed=10.7 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:29:41] train_metrics | snapshot | completed_total=496 | window=128 | ckpts=2 | yaw_mean=0.0212 | tilt_mean=0.0126 | bounce_mean=0.1134 | scuff_mean=141.4609 | success_rate=1.000
+[soft-stage 05:30:00] train_heartbeat | alive | elapsed=11.0 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:30:01] train_metrics | snapshot | completed_total=512 | window=128 | ckpts=2 | yaw_mean=0.0202 | tilt_mean=0.0124 | bounce_mean=0.1133 | scuff_mean=141.8184 | success_rate=1.000
+[soft-stage 05:30:20] train_heartbeat | alive | elapsed=11.3 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:30:21] train_metrics | snapshot | completed_total=528 | window=128 | ckpts=2 | yaw_mean=0.0207 | tilt_mean=0.0123 | bounce_mean=0.1131 | scuff_mean=141.9258 | success_rate=1.000
+[soft-stage 05:30:40] train_heartbeat | alive | elapsed=11.7 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:30:41] train_metrics | snapshot | completed_total=544 | window=128 | ckpts=2 | yaw_mean=0.0207 | tilt_mean=0.0122 | bounce_mean=0.1129 | scuff_mean=142.1328 | success_rate=1.000
+[soft-stage 05:31:00] train_heartbeat | alive | elapsed=12.0 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:31:01] train_metrics | snapshot | completed_total=560 | window=128 | ckpts=2 | yaw_mean=0.0205 | tilt_mean=0.0122 | bounce_mean=0.1127 | scuff_mean=142.1738 | success_rate=1.000
+[soft-stage 05:31:21] train_heartbeat | alive | elapsed=12.3 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:31:21] train_metrics | snapshot | completed_total=576 | window=128 | ckpts=2 | yaw_mean=0.0214 | tilt_mean=0.0122 | bounce_mean=0.1124 | scuff_mean=142.2324 | success_rate=1.000
+[soft-stage 05:31:41] train_heartbeat | alive | elapsed=12.7 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:31:41] train_metrics | snapshot | completed_total=592 | window=128 | ckpts=2 | yaw_mean=0.0208 | tilt_mean=0.0122 | bounce_mean=0.1121 | scuff_mean=142.2441 | success_rate=1.000
+[soft-stage 05:32:01] train_heartbeat | alive | elapsed=13.0 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:32:01] train_metrics | snapshot | completed_total=608 | window=128 | ckpts=2 | yaw_mean=0.0206 | tilt_mean=0.0122 | bounce_mean=0.1118 | scuff_mean=142.2812 | success_rate=1.000
+[soft-stage 05:32:21] train_heartbeat | alive | elapsed=13.3 min | checkpoints=2 | latest=model_100.pt | logdir_changed=1
+[soft-stage 05:32:21] train_metrics | snapshot | completed_total=624 | window=128 | ckpts=2 | yaw_mean=0.0192 | tilt_mean=0.0121 | bounce_mean=0.1116 | scuff_mean=142.4141 | success_rate=1.000
+[soft-stage 05:32:34] train_mode | runner.learn finished
+[soft-stage 05:32:34] train_mode | skip legacy final_eval output
+[soft-stage 05:32:34] train_mode | done
+[soft-stage 05:32:34] train_mode | stop heartbeat thread
+[soft-stage 05:32:34] main | close simulation_app

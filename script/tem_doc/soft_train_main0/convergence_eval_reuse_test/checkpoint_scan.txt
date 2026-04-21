@@ -1,0 +1,6 @@
+log_dir=D:\Project\RLCPG\quadraped_RL_CPG\script\tem_doc\soft_train_main
+checkpoint_count=3
+include_baseline=1
+D:\Project\RLCPG\quadraped_RL_CPG\script\tem_doc\soft_train_main\model_0.pt
+D:\Project\RLCPG\quadraped_RL_CPG\script\tem_doc\soft_train_main\model_25.pt
+D:\Project\RLCPG\quadraped_RL_CPG\script\tem_doc\soft_train_main\model_50.pt

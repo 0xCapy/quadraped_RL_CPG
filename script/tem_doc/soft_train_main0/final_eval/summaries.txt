@@ -1,0 +1,31 @@
+[train_soft ep 0000] success=0 | reason=running | T=0.00s
+cmd: v=0.00 m/s
+track: v_mean=0.00 | v_rmse=0.000 | yaw_final=0.000 | yaw_rate_abs=0.000
+stability: roll_rms=0.000 | pitch_rms=0.000 | tilt_rms=0.000 | bounce_rms=0.000 | z_min=inf
+contact: continuity=0.000 | diag_asym=0.000 | scuff=0.0
+control: residual_rms=0.000 | residual_rate_rms=0.000 | joint_vel_rms=0.000
+return: 0.000
+
+[train_soft ep 0001] success=0 | reason=running | T=0.00s
+cmd: v=0.00 m/s
+track: v_mean=0.00 | v_rmse=0.000 | yaw_final=0.000 | yaw_rate_abs=0.000
+stability: roll_rms=0.000 | pitch_rms=0.000 | tilt_rms=0.000 | bounce_rms=0.000 | z_min=inf
+contact: continuity=0.000 | diag_asym=0.000 | scuff=0.0
+control: residual_rms=0.000 | residual_rate_rms=0.000 | joint_vel_rms=0.000
+return: 0.000
+
+[train_soft ep 0002] success=0 | reason=running | T=0.00s
+cmd: v=0.00 m/s
+track: v_mean=0.00 | v_rmse=0.000 | yaw_final=0.000 | yaw_rate_abs=0.000
+stability: roll_rms=0.000 | pitch_rms=0.000 | tilt_rms=0.000 | bounce_rms=0.000 | z_min=inf
+contact: continuity=0.000 | diag_asym=0.000 | scuff=0.0
+control: residual_rms=0.000 | residual_rate_rms=0.000 | joint_vel_rms=0.000
+return: 0.000
+
+[train_soft ep 0003] success=0 | reason=running | T=0.00s
+cmd: v=0.00 m/s
+track: v_mean=0.00 | v_rmse=0.000 | yaw_final=0.000 | yaw_rate_abs=0.000
+stability: roll_rms=0.000 | pitch_rms=0.000 | tilt_rms=0.000 | bounce_rms=0.000 | z_min=inf
+contact: continuity=0.000 | diag_asym=0.000 | scuff=0.0
+control: residual_rms=0.000 | residual_rate_rms=0.000 | joint_vel_rms=0.000
+return: 0.000

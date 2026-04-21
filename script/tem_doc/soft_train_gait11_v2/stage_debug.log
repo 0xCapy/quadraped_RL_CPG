@@ -356,3 +356,203 @@ c=20.0 | convergence_window=128 | log_dir=D:\Project\RLCPG\quadraped_RL_CPG\scri
 [soft-stage 04:36:52] train_heartbeat | alive | elapsed=54.3 min | checkpoints=36 | latest=model_875.pt | logdir_changed=1
 [soft-stage 04:37:12] train_metrics | snapshot | ep=7583 | n=128 | yaw=0.0108 | tilt=0.0057 | bnc=0.1028 | scf=150.53 | succ=1.000
 [soft-stage 04:37:12] train_heartbeat | alive | elapsed=54.7 min | checkpoints=36 | latest=model_875.pt | logdir_changed=1
+[soft-stage 04:37:32] train_metrics | snapshot | ep=7615 | n=128 | yaw=0.0116 | tilt=0.0057 | bnc=0.1029 | scf=150.63 | succ=1.000
+[soft-stage 04:37:32] train_heartbeat | alive | elapsed=55.0 min | checkpoints=36 | latest=model_875.pt | logdir_changed=1
+[soft-stage 04:37:52] train_metrics | snapshot | ep=7647 | n=128 | yaw=0.0126 | tilt=0.0059 | bnc=0.1032 | scf=150.24 | succ=1.000
+[soft-stage 04:37:52] train_heartbeat | alive | elapsed=55.3 min | checkpoints=36 | latest=model_875.pt | logdir_changed=1
+[soft-stage 04:38:12] train_metrics | snapshot | ep=7711 | n=128 | yaw=0.0132 | tilt=0.0060 | bnc=0.1030 | scf=149.88 | succ=1.000
+[soft-stage 04:38:12] train_heartbeat | alive | elapsed=55.7 min | checkpoints=37 | latest=model_900.pt | logdir_changed=1
+[soft-stage 04:38:32] train_metrics | snapshot | ep=7743 | n=128 | yaw=0.0128 | tilt=0.0062 | bnc=0.1028 | scf=149.42 | succ=1.000
+[soft-stage 04:38:32] train_heartbeat | alive | elapsed=56.0 min | checkpoints=37 | latest=model_900.pt | logdir_changed=1
+[soft-stage 04:38:52] train_metrics | snapshot | ep=7775 | n=128 | yaw=0.0127 | tilt=0.0060 | bnc=0.1025 | scf=149.81 | succ=1.000
+[soft-stage 04:38:52] train_heartbeat | alive | elapsed=56.3 min | checkpoints=37 | latest=model_900.pt | logdir_changed=1
+[soft-stage 04:39:12] train_metrics | snapshot | ep=7839 | n=128 | yaw=0.0120 | tilt=0.0060 | bnc=0.1023 | scf=150.01 | succ=1.000
+[soft-stage 04:39:12] train_heartbeat | alive | elapsed=56.7 min | checkpoints=37 | latest=model_900.pt | logdir_changed=1
+[soft-stage 04:39:32] train_metrics | snapshot | ep=7871 | n=128 | yaw=0.0114 | tilt=0.0058 | bnc=0.1023 | scf=150.42 | succ=1.000
+[soft-stage 04:39:32] train_heartbeat | alive | elapsed=57.0 min | checkpoints=37 | latest=model_900.pt | logdir_changed=1
+[soft-stage 04:39:52] train_metrics | snapshot | ep=7935 | n=128 | yaw=0.0108 | tilt=0.0061 | bnc=0.1025 | scf=150.03 | succ=1.000
+[soft-stage 04:39:52] train_heartbeat | alive | elapsed=57.3 min | checkpoints=38 | latest=model_925.pt | logdir_changed=1
+[soft-stage 04:40:12] train_metrics | snapshot | ep=7967 | n=128 | yaw=0.0115 | tilt=0.0062 | bnc=0.1027 | scf=149.89 | succ=1.000
+[soft-stage 04:40:12] train_heartbeat | alive | elapsed=57.7 min | checkpoints=38 | latest=model_925.pt | logdir_changed=1
+[soft-stage 04:40:32] train_metrics | snapshot | ep=8031 | n=128 | yaw=0.0106 | tilt=0.0064 | bnc=0.1027 | scf=149.60 | succ=1.000
+[soft-stage 04:40:32] train_heartbeat | alive | elapsed=58.0 min | checkpoints=38 | latest=model_925.pt | logdir_changed=1
+[soft-stage 04:40:52] train_metrics | snapshot | ep=8063 | n=128 | yaw=0.0102 | tilt=0.0063 | bnc=0.1027 | scf=149.54 | succ=1.000
+[soft-stage 04:40:52] train_heartbeat | alive | elapsed=58.3 min | checkpoints=38 | latest=model_925.pt | logdir_changed=1
+[soft-stage 04:41:12] train_metrics | snapshot | ep=8127 | n=128 | yaw=0.0124 | tilt=0.0062 | bnc=0.1030 | scf=149.38 | succ=1.000
+[soft-stage 04:41:12] train_heartbeat | alive | elapsed=58.7 min | checkpoints=39 | latest=model_950.pt | logdir_changed=1
+[soft-stage 04:41:32] train_metrics | snapshot | ep=8159 | n=128 | yaw=0.0122 | tilt=0.0060 | bnc=0.1028 | scf=149.36 | succ=1.000
+[soft-stage 04:41:32] train_heartbeat | alive | elapsed=59.0 min | checkpoints=39 | latest=model_950.pt | logdir_changed=1
+[soft-stage 04:41:52] train_metrics | snapshot | ep=8191 | n=128 | yaw=0.0129 | tilt=0.0059 | bnc=0.1027 | scf=149.54 | succ=1.000
+[soft-stage 04:41:52] train_heartbeat | alive | elapsed=59.3 min | checkpoints=39 | latest=model_950.pt | logdir_changed=1
+[soft-stage 04:42:12] train_metrics | snapshot | ep=8255 | n=128 | yaw=0.0110 | tilt=0.0055 | bnc=0.1023 | scf=149.82 | succ=1.000
+[soft-stage 04:42:12] train_heartbeat | alive | elapsed=59.7 min | checkpoints=39 | latest=model_950.pt | logdir_changed=1
+[soft-stage 04:42:32] train_metrics | snapshot | ep=8287 | n=128 | yaw=0.0108 | tilt=0.0054 | bnc=0.1023 | scf=150.02 | succ=1.000
+[soft-stage 04:42:32] train_heartbeat | alive | elapsed=60.0 min | checkpoints=39 | latest=model_950.pt | logdir_changed=1
+[soft-stage 04:42:52] train_metrics | snapshot | ep=8351 | n=128 | yaw=0.0095 | tilt=0.0055 | bnc=0.1021 | scf=150.09 | succ=1.000
+[soft-stage 04:42:52] train_heartbeat | alive | elapsed=60.3 min | checkpoints=40 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:43:12] train_metrics | snapshot | ep=8383 | n=128 | yaw=0.0100 | tilt=0.0055 | bnc=0.1022 | scf=149.99 | succ=1.000
+[soft-stage 04:43:12] train_heartbeat | alive | elapsed=60.7 min | checkpoints=40 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:43:32] train_metrics | snapshot | ep=8447 | n=128 | yaw=0.0125 | tilt=0.0056 | bnc=0.1025 | scf=149.86 | succ=1.000
+[soft-stage 04:43:32] train_heartbeat | alive | elapsed=61.0 min | checkpoints=40 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:43:52] train_metrics | snapshot | ep=8479 | n=128 | yaw=0.0130 | tilt=0.0056 | bnc=0.1027 | scf=149.75 | succ=1.000
+[soft-stage 04:43:52] train_heartbeat | alive | elapsed=61.4 min | checkpoints=40 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:44:12] train_metrics | snapshot | ep=8543 | n=128 | yaw=0.0144 | tilt=0.0057 | bnc=0.1026 | scf=149.69 | succ=1.000
+[soft-stage 04:44:12] train_heartbeat | alive | elapsed=61.7 min | checkpoints=41 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:44:32] train_metrics | snapshot | ep=8575 | n=128 | yaw=0.0145 | tilt=0.0058 | bnc=0.1026 | scf=149.40 | succ=1.000
+[soft-stage 04:44:32] train_heartbeat | alive | elapsed=62.0 min | checkpoints=41 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:44:52] train_metrics | snapshot | ep=8639 | n=128 | yaw=0.0132 | tilt=0.0056 | bnc=0.1025 | scf=149.73 | succ=1.000
+[soft-stage 04:44:52] train_heartbeat | alive | elapsed=62.4 min | checkpoints=41 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:45:12] train_metrics | snapshot | ep=8671 | n=128 | yaw=0.0128 | tilt=0.0056 | bnc=0.1026 | scf=149.85 | succ=1.000
+[soft-stage 04:45:12] train_heartbeat | alive | elapsed=62.7 min | checkpoints=41 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:45:32] train_metrics | snapshot | ep=8735 | n=128 | yaw=0.0129 | tilt=0.0057 | bnc=0.1024 | scf=149.87 | succ=1.000
+[soft-stage 04:45:32] train_heartbeat | alive | elapsed=63.0 min | checkpoints=41 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:45:52] train_metrics | snapshot | ep=8767 | n=128 | yaw=0.0136 | tilt=0.0058 | bnc=0.1025 | scf=149.68 | succ=1.000
+[soft-stage 04:45:52] train_heartbeat | alive | elapsed=63.4 min | checkpoints=42 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:46:12] train_metrics | snapshot | ep=8799 | n=128 | yaw=0.0146 | tilt=0.0058 | bnc=0.1024 | scf=149.64 | succ=1.000
+[soft-stage 04:46:12] train_heartbeat | alive | elapsed=63.7 min | checkpoints=42 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:46:32] train_metrics | snapshot | ep=8863 | n=128 | yaw=0.0134 | tilt=0.0056 | bnc=0.1027 | scf=149.79 | succ=1.000
+[soft-stage 04:46:32] train_heartbeat | alive | elapsed=64.0 min | checkpoints=42 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:46:52] train_metrics | snapshot | ep=8895 | n=128 | yaw=0.0123 | tilt=0.0054 | bnc=0.1026 | scf=149.94 | succ=1.000
+[soft-stage 04:46:52] train_heartbeat | alive | elapsed=64.4 min | checkpoints=42 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:47:12] train_metrics | snapshot | ep=8959 | n=128 | yaw=0.0123 | tilt=0.0058 | bnc=0.1028 | scf=149.46 | succ=1.000
+[soft-stage 04:47:12] train_heartbeat | alive | elapsed=64.7 min | checkpoints=43 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:47:32] train_metrics | snapshot | ep=8991 | n=128 | yaw=0.0112 | tilt=0.0058 | bnc=0.1027 | scf=149.46 | succ=1.000
+[soft-stage 04:47:32] train_heartbeat | alive | elapsed=65.0 min | checkpoints=43 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:47:52] train_metrics | snapshot | ep=9055 | n=128 | yaw=0.0112 | tilt=0.0060 | bnc=0.1030 | scf=149.60 | succ=1.000
+[soft-stage 04:47:52] train_heartbeat | alive | elapsed=65.4 min | checkpoints=43 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:48:12] train_metrics | snapshot | ep=9087 | n=128 | yaw=0.0104 | tilt=0.0059 | bnc=0.1032 | scf=149.89 | succ=1.000
+[soft-stage 04:48:12] train_heartbeat | alive | elapsed=65.7 min | checkpoints=43 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:48:32] train_metrics | snapshot | ep=9151 | n=128 | yaw=0.0090 | tilt=0.0057 | bnc=0.1032 | scf=150.37 | succ=1.000
+[soft-stage 04:48:32] train_heartbeat | alive | elapsed=66.0 min | checkpoints=43 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:48:52] train_metrics | snapshot | ep=9183 | n=128 | yaw=0.0080 | tilt=0.0055 | bnc=0.1030 | scf=150.61 | succ=1.000
+[soft-stage 04:48:52] train_heartbeat | alive | elapsed=66.4 min | checkpoints=44 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:49:12] train_metrics | snapshot | ep=9247 | n=128 | yaw=0.0083 | tilt=0.0056 | bnc=0.1031 | scf=150.27 | succ=1.000
+[soft-stage 04:49:12] train_heartbeat | alive | elapsed=66.7 min | checkpoints=44 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:49:32] train_metrics | snapshot | ep=9279 | n=128 | yaw=0.0086 | tilt=0.0056 | bnc=0.1032 | scf=150.22 | succ=1.000
+[soft-stage 04:49:32] train_heartbeat | alive | elapsed=67.0 min | checkpoints=44 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:49:52] train_metrics | snapshot | ep=9311 | n=128 | yaw=0.0086 | tilt=0.0058 | bnc=0.1034 | scf=149.90 | succ=1.000
+[soft-stage 04:49:52] train_heartbeat | alive | elapsed=67.4 min | checkpoints=44 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:50:12] train_metrics | snapshot | ep=9375 | n=128 | yaw=0.0082 | tilt=0.0057 | bnc=0.1033 | scf=150.15 | succ=1.000
+[soft-stage 04:50:12] train_heartbeat | alive | elapsed=67.7 min | checkpoints=44 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:50:32] train_metrics | snapshot | ep=9407 | n=128 | yaw=0.0080 | tilt=0.0058 | bnc=0.1031 | scf=150.35 | succ=1.000
+[soft-stage 04:50:32] train_heartbeat | alive | elapsed=68.0 min | checkpoints=45 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:50:52] train_metrics | snapshot | ep=9439 | n=128 | yaw=0.0080 | tilt=0.0057 | bnc=0.1032 | scf=150.61 | succ=1.000
+[soft-stage 04:50:52] train_heartbeat | alive | elapsed=68.4 min | checkpoints=45 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:51:12] train_metrics | snapshot | ep=9503 | n=128 | yaw=0.0088 | tilt=0.0059 | bnc=0.1032 | scf=150.88 | succ=1.000
+[soft-stage 04:51:12] train_heartbeat | alive | elapsed=68.7 min | checkpoints=45 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:51:32] train_metrics | snapshot | ep=9535 | n=128 | yaw=0.0095 | tilt=0.0062 | bnc=0.1033 | scf=150.42 | succ=1.000
+[soft-stage 04:51:32] train_heartbeat | alive | elapsed=69.0 min | checkpoints=45 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:51:52] train_metrics | snapshot | ep=9567 | n=128 | yaw=0.0105 | tilt=0.0061 | bnc=0.1031 | scf=150.27 | succ=1.000
+[soft-stage 04:51:52] train_heartbeat | alive | elapsed=69.4 min | checkpoints=45 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:52:12] train_metrics | snapshot | ep=9631 | n=128 | yaw=0.0109 | tilt=0.0061 | bnc=0.1028 | scf=149.99 | succ=1.000
+[soft-stage 04:52:12] train_heartbeat | alive | elapsed=69.7 min | checkpoints=46 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:52:32] train_metrics | snapshot | ep=9663 | n=128 | yaw=0.0112 | tilt=0.0060 | bnc=0.1029 | scf=150.07 | succ=1.000
+[soft-stage 04:52:32] train_heartbeat | alive | elapsed=70.0 min | checkpoints=46 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:52:52] train_metrics | snapshot | ep=9695 | n=128 | yaw=0.0119 | tilt=0.0061 | bnc=0.1031 | scf=149.84 | succ=1.000
+[soft-stage 04:52:52] train_heartbeat | alive | elapsed=70.4 min | checkpoints=46 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:53:12] train_metrics | snapshot | ep=9759 | n=128 | yaw=0.0108 | tilt=0.0062 | bnc=0.1031 | scf=149.69 | succ=1.000
+[soft-stage 04:53:12] train_heartbeat | alive | elapsed=70.7 min | checkpoints=46 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:53:32] train_metrics | snapshot | ep=9791 | n=128 | yaw=0.0098 | tilt=0.0060 | bnc=0.1030 | scf=150.00 | succ=1.000
+[soft-stage 04:53:32] train_heartbeat | alive | elapsed=71.0 min | checkpoints=46 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:53:52] train_metrics | snapshot | ep=9855 | n=128 | yaw=0.0096 | tilt=0.0059 | bnc=0.1030 | scf=150.01 | succ=1.000
+[soft-stage 04:53:52] train_heartbeat | alive | elapsed=71.4 min | checkpoints=47 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:54:12] train_metrics | snapshot | ep=9887 | n=128 | yaw=0.0093 | tilt=0.0056 | bnc=0.1028 | scf=150.46 | succ=1.000
+[soft-stage 04:54:12] train_heartbeat | alive | elapsed=71.7 min | checkpoints=47 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:54:32] train_metrics | snapshot | ep=9919 | n=128 | yaw=0.0093 | tilt=0.0057 | bnc=0.1027 | scf=150.22 | succ=1.000
+[soft-stage 04:54:32] train_heartbeat | alive | elapsed=72.0 min | checkpoints=47 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:54:52] train_metrics | snapshot | ep=9983 | n=128 | yaw=0.0085 | tilt=0.0057 | bnc=0.1026 | scf=150.64 | succ=1.000
+[soft-stage 04:54:52] train_heartbeat | alive | elapsed=72.4 min | checkpoints=47 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:55:12] train_metrics | snapshot | ep=10015 | n=128 | yaw=0.0087 | tilt=0.0058 | bnc=0.1025 | scf=150.46 | succ=1.000
+[soft-stage 04:55:12] train_heartbeat | alive | elapsed=72.7 min | checkpoints=47 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:55:32] train_metrics | snapshot | ep=10047 | n=128 | yaw=0.0085 | tilt=0.0058 | bnc=0.1026 | scf=150.56 | succ=1.000
+[soft-stage 04:55:32] train_heartbeat | alive | elapsed=73.0 min | checkpoints=48 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:55:52] train_metrics | snapshot | ep=10111 | n=128 | yaw=0.0085 | tilt=0.0059 | bnc=0.1028 | scf=150.39 | succ=1.000
+[soft-stage 04:55:52] train_heartbeat | alive | elapsed=73.4 min | checkpoints=48 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:56:12] train_metrics | snapshot | ep=10143 | n=128 | yaw=0.0085 | tilt=0.0059 | bnc=0.1030 | scf=150.48 | succ=1.000
+[soft-stage 04:56:12] train_heartbeat | alive | elapsed=73.7 min | checkpoints=48 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:56:32] train_metrics | snapshot | ep=10175 | n=128 | yaw=0.0085 | tilt=0.0059 | bnc=0.1032 | scf=150.44 | succ=1.000
+[soft-stage 04:56:32] train_heartbeat | alive | elapsed=74.0 min | checkpoints=48 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:56:52] train_metrics | snapshot | ep=10239 | n=128 | yaw=0.0080 | tilt=0.0058 | bnc=0.1032 | scf=150.66 | succ=1.000
+[soft-stage 04:56:52] train_heartbeat | alive | elapsed=74.4 min | checkpoints=48 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:57:12] train_metrics | snapshot | ep=10271 | n=128 | yaw=0.0084 | tilt=0.0057 | bnc=0.1032 | scf=150.75 | succ=1.000
+[soft-stage 04:57:12] train_heartbeat | alive | elapsed=74.7 min | checkpoints=49 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:57:32] train_metrics | snapshot | ep=10303 | n=128 | yaw=0.0082 | tilt=0.0057 | bnc=0.1031 | scf=150.67 | succ=1.000
+[soft-stage 04:57:33] train_heartbeat | alive | elapsed=75.0 min | checkpoints=49 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:57:52] train_metrics | snapshot | ep=10367 | n=128 | yaw=0.0101 | tilt=0.0056 | bnc=0.1031 | scf=150.62 | succ=1.000
+[soft-stage 04:57:53] train_heartbeat | alive | elapsed=75.4 min | checkpoints=49 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:58:12] train_metrics | snapshot | ep=10399 | n=128 | yaw=0.0112 | tilt=0.0057 | bnc=0.1032 | scf=150.38 | succ=1.000
+[soft-stage 04:58:13] train_heartbeat | alive | elapsed=75.7 min | checkpoints=49 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:58:32] train_metrics | snapshot | ep=10431 | n=128 | yaw=0.0119 | tilt=0.0056 | bnc=0.1031 | scf=150.46 | succ=1.000
+[soft-stage 04:58:33] train_heartbeat | alive | elapsed=76.0 min | checkpoints=49 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:58:52] train_metrics | snapshot | ep=10495 | n=128 | yaw=0.0119 | tilt=0.0056 | bnc=0.1030 | scf=150.10 | succ=1.000
+[soft-stage 04:58:53] train_heartbeat | alive | elapsed=76.4 min | checkpoints=50 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:59:12] train_metrics | snapshot | ep=10527 | n=128 | yaw=0.0104 | tilt=0.0055 | bnc=0.1029 | scf=150.27 | succ=1.000
+[soft-stage 04:59:13] train_heartbeat | alive | elapsed=76.7 min | checkpoints=50 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:59:32] train_metrics | snapshot | ep=10559 | n=128 | yaw=0.0106 | tilt=0.0054 | bnc=0.1029 | scf=150.35 | succ=1.000
+[soft-stage 04:59:33] train_heartbeat | alive | elapsed=77.0 min | checkpoints=50 | latest=model_975.pt | logdir_changed=1
+[soft-stage 04:59:52] train_metrics | snapshot | ep=10623 | n=128 | yaw=0.0123 | tilt=0.0054 | bnc=0.1030 | scf=150.51 | succ=1.000
+[soft-stage 04:59:53] train_heartbeat | alive | elapsed=77.4 min | checkpoints=50 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:00:12] train_metrics | snapshot | ep=10655 | n=128 | yaw=0.0136 | tilt=0.0055 | bnc=0.1030 | scf=150.40 | succ=1.000
+[soft-stage 05:00:13] train_heartbeat | alive | elapsed=77.7 min | checkpoints=50 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:00:32] train_metrics | snapshot | ep=10687 | n=128 | yaw=0.0140 | tilt=0.0055 | bnc=0.1030 | scf=150.35 | succ=1.000
+[soft-stage 05:00:33] train_heartbeat | alive | elapsed=78.0 min | checkpoints=51 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:00:52] train_metrics | snapshot | ep=10719 | n=128 | yaw=0.0136 | tilt=0.0053 | bnc=0.1028 | scf=150.44 | succ=1.000
+[soft-stage 05:00:53] train_heartbeat | alive | elapsed=78.4 min | checkpoints=51 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:01:12] train_metrics | snapshot | ep=10783 | n=128 | yaw=0.0109 | tilt=0.0052 | bnc=0.1027 | scf=150.60 | succ=1.000
+[soft-stage 05:01:13] train_heartbeat | alive | elapsed=78.7 min | checkpoints=51 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:01:32] train_metrics | snapshot | ep=10815 | n=128 | yaw=0.0103 | tilt=0.0052 | bnc=0.1029 | scf=150.52 | succ=1.000
+[soft-stage 05:01:33] train_heartbeat | alive | elapsed=79.0 min | checkpoints=51 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:01:52] train_metrics | snapshot | ep=10847 | n=128 | yaw=0.0103 | tilt=0.0053 | bnc=0.1032 | scf=150.38 | succ=1.000
+[soft-stage 05:01:53] train_heartbeat | alive | elapsed=79.4 min | checkpoints=51 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:02:12] train_metrics | snapshot | ep=10911 | n=128 | yaw=0.0119 | tilt=0.0054 | bnc=0.1032 | scf=150.19 | succ=1.000
+[soft-stage 05:02:13] train_heartbeat | alive | elapsed=79.7 min | checkpoints=52 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:02:32] train_metrics | snapshot | ep=10943 | n=128 | yaw=0.0133 | tilt=0.0056 | bnc=0.1031 | scf=150.01 | succ=1.000
+[soft-stage 05:02:33] train_heartbeat | alive | elapsed=80.0 min | checkpoints=52 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:02:52] train_metrics | snapshot | ep=10975 | n=128 | yaw=0.0136 | tilt=0.0058 | bnc=0.1032 | scf=149.95 | succ=1.000
+[soft-stage 05:02:53] train_heartbeat | alive | elapsed=80.4 min | checkpoints=52 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:03:12] train_metrics | snapshot | ep=11039 | n=128 | yaw=0.0141 | tilt=0.0058 | bnc=0.1029 | scf=149.66 | succ=1.000
+[soft-stage 05:03:13] train_heartbeat | alive | elapsed=80.7 min | checkpoints=52 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:03:32] train_metrics | snapshot | ep=11071 | n=128 | yaw=0.0126 | tilt=0.0057 | bnc=0.1031 | scf=150.00 | succ=1.000
+[soft-stage 05:03:33] train_heartbeat | alive | elapsed=81.0 min | checkpoints=52 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:03:52] train_metrics | snapshot | ep=11103 | n=128 | yaw=0.0120 | tilt=0.0055 | bnc=0.1028 | scf=150.37 | succ=1.000
+[soft-stage 05:03:53] train_heartbeat | alive | elapsed=81.4 min | checkpoints=53 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:04:13] train_metrics | snapshot | ep=11167 | n=128 | yaw=0.0122 | tilt=0.0052 | bnc=0.1032 | scf=150.87 | succ=1.000
+[soft-stage 05:04:13] train_heartbeat | alive | elapsed=81.7 min | checkpoints=53 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:04:33] train_metrics | snapshot | ep=11199 | n=128 | yaw=0.0134 | tilt=0.0052 | bnc=0.1031 | scf=150.82 | succ=1.000
+[soft-stage 05:04:33] train_heartbeat | alive | elapsed=82.0 min | checkpoints=53 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:04:53] train_metrics | snapshot | ep=11231 | n=128 | yaw=0.0145 | tilt=0.0053 | bnc=0.1029 | scf=150.55 | succ=1.000
+[soft-stage 05:04:53] train_heartbeat | alive | elapsed=82.4 min | checkpoints=53 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:05:13] train_metrics | snapshot | ep=11263 | n=128 | yaw=0.0152 | tilt=0.0054 | bnc=0.1028 | scf=150.51 | succ=1.000
+[soft-stage 05:05:13] train_heartbeat | alive | elapsed=82.7 min | checkpoints=53 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:05:33] train_metrics | snapshot | ep=11327 | n=128 | yaw=0.0124 | tilt=0.0054 | bnc=0.1029 | scf=150.43 | succ=1.000
+[soft-stage 05:05:33] train_heartbeat | alive | elapsed=83.0 min | checkpoints=54 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:05:53] train_metrics | snapshot | ep=11359 | n=128 | yaw=0.0117 | tilt=0.0054 | bnc=0.1029 | scf=150.30 | succ=1.000
+[soft-stage 05:05:53] train_heartbeat | alive | elapsed=83.4 min | checkpoints=54 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:06:13] train_metrics | snapshot | ep=11391 | n=128 | yaw=0.0112 | tilt=0.0054 | bnc=0.1031 | scf=150.09 | succ=1.000
+[soft-stage 05:06:13] train_heartbeat | alive | elapsed=83.7 min | checkpoints=54 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:06:33] train_metrics | snapshot | ep=11455 | n=128 | yaw=0.0116 | tilt=0.0055 | bnc=0.1032 | scf=150.13 | succ=1.000
+[soft-stage 05:06:33] train_heartbeat | alive | elapsed=84.0 min | checkpoints=54 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:06:53] train_metrics | snapshot | ep=11487 | n=128 | yaw=0.0114 | tilt=0.0054 | bnc=0.1035 | scf=150.19 | succ=1.000
+[soft-stage 05:06:53] train_heartbeat | alive | elapsed=84.4 min | checkpoints=54 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:07:13] train_metrics | snapshot | ep=11519 | n=128 | yaw=0.0115 | tilt=0.0053 | bnc=0.1034 | scf=150.39 | succ=1.000
+[soft-stage 05:07:13] train_heartbeat | alive | elapsed=84.7 min | checkpoints=55 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:07:33] train_metrics | snapshot | ep=11583 | n=128 | yaw=0.0116 | tilt=0.0053 | bnc=0.1032 | scf=150.23 | succ=1.000
+[soft-stage 05:07:33] train_heartbeat | alive | elapsed=85.0 min | checkpoints=55 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:07:53] train_metrics | snapshot | ep=11615 | n=128 | yaw=0.0113 | tilt=0.0053 | bnc=0.1031 | scf=150.30 | succ=1.000
+[soft-stage 05:07:53] train_heartbeat | alive | elapsed=85.4 min | checkpoints=55 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:08:13] train_metrics | snapshot | ep=11647 | n=128 | yaw=0.0113 | tilt=0.0054 | bnc=0.1031 | scf=150.22 | succ=1.000
+[soft-stage 05:08:13] train_heartbeat | alive | elapsed=85.7 min | checkpoints=55 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:08:33] train_metrics | snapshot | ep=11679 | n=128 | yaw=0.0119 | tilt=0.0053 | bnc=0.1030 | scf=150.35 | succ=1.000
+[soft-stage 05:08:33] train_heartbeat | alive | elapsed=86.0 min | checkpoints=55 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:08:53] train_metrics | snapshot | ep=11743 | n=128 | yaw=0.0119 | tilt=0.0054 | bnc=0.1026 | scf=150.31 | succ=1.000
+[soft-stage 05:08:53] train_heartbeat | alive | elapsed=86.4 min | checkpoints=56 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:09:13] train_metrics | snapshot | ep=11775 | n=128 | yaw=0.0113 | tilt=0.0054 | bnc=0.1025 | scf=149.98 | succ=1.000
+[soft-stage 05:09:13] train_heartbeat | alive | elapsed=86.7 min | checkpoints=56 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:09:33] train_metrics | snapshot | ep=11807 | n=128 | yaw=0.0108 | tilt=0.0054 | bnc=0.1024 | scf=149.94 | succ=1.000
+[soft-stage 05:09:33] train_heartbeat | alive | elapsed=87.0 min | checkpoints=56 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:09:53] train_metrics | snapshot | ep=11839 | n=128 | yaw=0.0110 | tilt=0.0053 | bnc=0.1024 | scf=150.06 | succ=1.000
+[soft-stage 05:09:53] train_heartbeat | alive | elapsed=87.4 min | checkpoints=56 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:10:13] train_metrics | snapshot | ep=11903 | n=128 | yaw=0.0106 | tilt=0.0053 | bnc=0.1029 | scf=150.44 | succ=1.000
+[soft-stage 05:10:13] train_heartbeat | alive | elapsed=87.7 min | checkpoints=56 | latest=model_975.pt | logdir_changed=1
+[soft-stage 05:10:33] train_metrics | snapshot | ep=11935 | n=128 | yaw=0.0102 | tilt=0.0053 | bnc=0.1028 | scf=150.22 | succ=1.000
+[soft-stage 05:10:33] train_heartbeat | alive | elapsed=88.0 min | checkpoints=57 | latest=model_975.pt | logdir_changed=1
